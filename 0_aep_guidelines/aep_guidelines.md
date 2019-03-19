@@ -3,6 +3,7 @@
 | AEP number | 0                                                            |
 | Title      | AiiDA Enhancement Proposal Guidelines                        |
 | Authors    | [Leopold Talirz](mailto:leopold.talirz@epfl.ch)  [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) |
+| Champions  |  [Leopold Talirz](mailto:leopold.talirz@epfl.ch)  [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch)                                                            |
 | Status     | active                                                       |
 | Type       | P - Process                                                  |
 | Created    | 19-Mar-2019                                                  |
@@ -20,8 +21,9 @@ This file itself constitutes an AEP and might be used a template for new AEPs.
 An AEP should contain the following elements:
 
 * Title: Should uniquely identify the proposed enhancment and be short 
-* Header table: Specifying AEP number, title, authors, status, type and creation an modification dates. 
+* Header table: Specifying AEP number, title, authors, champions (individuals willing to take care of the AEP), status, type and creation an modification dates. 
 The status will one of the following:
+	* `submitted` - this should be the initial status when submitting the pull request
 	* `accepted` — this AEP has been accepted and is currently being implemented
 	* `implemented` — this AEP has been implemented
 	* `rejected` - this AEP has been rejected and will not be implemented
@@ -37,10 +39,23 @@ The status will one of the following:
 both type and status will be used a pull request label. 
 * a description of the problem, e.g. containing a snippet of code that show an issue or bad design
 * an abstract (1-2 sentences) of the proposed enhancement, in the best case also containing (pseudo)code samples describing the solution
-* 
+* a detailed discussion about all relevant technical information, possible API designs
+* a summary for pros and cons for the proposed enhancement, detailing which possible compatbility issues
+
+### Submission process
+1. Use this Markdown file as template to describe the AEP 
+2. Create a fork of this repository and create a folder with the name of the AEP in lower snake-case and put the markdown file (with the title of the AEP in lower snake-case) into this folder. This folder might also contain supporting material such as figures. 
+3. Submit a pull request
+4. If the pull request is accepted (i.e. the AEP follows the guidelines outlined here) the status will change to `active` and it will also be added to the index
 
 ## Pros and Cons 
 
+### Pros
+* More structured discussion, individuals need to put a bit more thought into proposals
+* Better documented decision making process 
+
+### Cons
+* More effort needed to submit an enhancement proposal
 
 
 
