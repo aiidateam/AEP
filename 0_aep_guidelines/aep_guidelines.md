@@ -34,9 +34,10 @@ The status will one of the following:
 	* `P - Process AEP` - describe changes to the processes in the AiIDA ecoystem. 
 	This might be a change in the decision making or development process (e.g. new standards for commit messages)
 	* `S - Standards Track AEP` - describe new features
-
 both type and status will be used a pull request label. 
-
+* a description of the problem, e.g. containing a snippet of code that show an issue or bad design
+* an abstract (1-2 sentences) of the proposed enhancement, in the best case also containing (pseudo)code samples describing the solution
+* 
 
 ## Pros and Cons 
 
