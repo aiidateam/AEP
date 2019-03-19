@@ -3,8 +3,8 @@
 | AEP number | 0                                                            |
 |------------|--------------------------------------------------------------|
 | Title      | AiiDA Enhancement Proposal Guidelines                        |
-| Authors    | [Leopold Talirz](mailto:leopold.talirz@epfl.ch)  [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) |
-| Champions  |  [Leopold Talirz](mailto:leopold.talirz@epfl.ch)  [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) |
+| Authors    | [Leopold Talirz](mailto:leopold.talirz@epfl.ch),  [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) |
+| Champions  |  [Leopold Talirz](mailto:leopold.talirz@epfl.ch),  [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) |
 | Status     | active                                                       |
 | Type       | P - Process                                                  |
 | Created    | 19-Mar-2019                                                  |
