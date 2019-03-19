@@ -7,6 +7,9 @@ The purpose is to publicly discuss new features/design choices in the AiiDA ecos
 
 ## Index of AEPs 
 
+| Number | Status           | Title                           |
+|--------|------------------|---------------------------------|
+| 0      |submitted         | [AEP guidelines]()              | 
 
 ## Submitting an AEP
 The submission process is described in the AEP submission guide. 
