@@ -10,7 +10,7 @@
 | Created    | 19-Mar-2019                                                  |
 
 ## Background 
-The AiiDA ecosystem with its plugins is highly complex and design decisions need centralized and documented dicussion. 
+The AiiDA ecosystem with its plugins is highly complex and design decisions need centralized and documented dicussion. Compare also [PEP-1](https://www.python.org/dev/peps/pep-0001/) for the rational behind introducing enhancement proposals for the python project. 
 
 ## Proposed Enhancement 
 The AEP process will be used to propose and discuss new features and design decisions for the AiiDA project. 
@@ -48,8 +48,8 @@ Toth type and status will be used a pull request label.
 * *Pros and Cons*: a summary for pros and cons for the proposed enhancement, detailing which possible compatbility issues
 
 ### Submission process
-1. Use this Markdown file as template to describe the AEP 
-2. [Create a fork](https://help.github.com/en/articles/fork-a-repo) of this repository and create a folder with the name of the AEP in lower snake-case and put the markdown file (with the title of the AEP in lower snake-case) into this folder. This folder might also contain supporting material such as figures. 
+1. Use this [Markdown](https://guides.github.com/features/mastering-markdown/) file as a template to describe the AEP 
+2. [Create a fork](https://help.github.com/en/articles/fork-a-repo) of this repository and create a folder with the name of the AEP in lower snake-case and put the markdown file (with the title of the AEP in lower [snake-case](https://en.wikipedia.org/wiki/Snake_case)) into this folder. This folder might also contain supporting material such as figures. 
 3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) 
 4. If the pull request is accepted (i.e. the AEP follows the guidelines outlined here) the status will change to `active` and it will also be added to the index on the `README.md` 
 
