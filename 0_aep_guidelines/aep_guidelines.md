@@ -39,7 +39,6 @@ A table containing:
     * `submitted` - this should be the initial status when submitting the pull request to the AEP repository
     * `active` - the pull request for this AEP has been merged and the AEP is currently under active discussion within the community 
     * `postponed` - this AEP is no longer under active discussion, might be interesting for the project but has no one who is willing to champion it 
-    * `accepted` - this AEP has been accepted and is currently being implemented
     * `rejected` - this AEP has been rejected and will not be implemented
     * `implemented` - this AEP has been implemented
     * `withdrawn` - this AEP has been withdrawn by the submitter but can be re-submitted if someone is willing to champion it
