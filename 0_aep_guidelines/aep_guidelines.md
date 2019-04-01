@@ -69,7 +69,7 @@ A summary for pros and cons for the proposed enhancement, detailing e.g. which p
 
 ### Submission process
 
-[AEP submission process](aep_diagram.png) 
+![AEP submission process](aep_diagram.png) 
 
 1. [Fork](https://help.github.com/en/articles/fork-a-repo) this repository
 2. Create a folder with the title of the AEP in lower [snake-case](https://en.wikipedia.org/wiki/Snake_case)
