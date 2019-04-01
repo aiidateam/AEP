@@ -1,6 +1,7 @@
 \documentclass{standalone}
 \usepackage{tikz}
 \usepackage{mathpazo}
+\usetikzlibrary{shapes,snakes}
 
 \definecolor{aiidaorange}{RGB}{255,124,22}
 \definecolor{aiidagreen}{RGB}{48,184,7}
@@ -8,7 +9,7 @@
 \definecolor{marvelred}{RGB}{220,50,38}
 
 \tikzstyle{box}=[draw, fill=aiidablue!30, minimum size=2em]
-\tikzstyle{box-review}=[draw, fill=aiidaorange!30, minimum size=2em]
+\tikzstyle{box-review}=[diamond, fill=aiidaorange!30, minimum size=2em]
 \tikzstyle{box-implemented}=[draw, fill=aiidagreen!30, minimum size=2em]
 \tikzstyle{box-negative}=[draw, fill=marvelred!30, minimum size=2em]
 \tikzstyle{box-withdrawn}=[draw, fill=gray!30, minimum size=2em]
