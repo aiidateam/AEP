@@ -68,13 +68,16 @@ A detailed discussion about all relevant technical information, possible API des
 A summary for pros and cons for the proposed enhancement, detailing e.g. which possible compatibility issues may arise.
 
 ### Submission process
+
+[AEP submission process](aep_diagram.png) 
+
 1. [Fork](https://help.github.com/en/articles/fork-a-repo) this repository
 2. Create a folder with the title of the AEP in lower [snake-case](https://en.wikipedia.org/wiki/Snake_case)
    and put a [Markdown](https://guides.github.com/features/mastering-markdown/) file with the title of the AEP in lower case inside this folder.
      * You may use the `aep_guidelines.md` as a template.
      * You may want to include additional files relevant to your enhancement proposal.
 3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the AEP repository
-4. If the pull request is accepted the status will change to `active` and it will be added to the AEP index in the `README.md` 
+4. Then, the pull request will be reviewed. If the pull request is accepted the status will change to `active` and it will be added to the AEP index in the `README.md` 
 
 ## Pros and Cons 
 
