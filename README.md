@@ -15,7 +15,6 @@ ecosystem and to document the decision making process.
 | Number | Status           | Title                                                            |
 |--------|------------------|------------------------------------------------------------------|
 | 000    | active           | [AEP guidelines](000_aep_guidelines/aep_guidelines.md)           | 
-| 001    | active           | [AiiDA dashboard](001_dashboard/aiida_dashboard.md)              | 
 
 ## Submitting an AEP
 The submission process is described in the [AEP guidelines](0_aep_guidelines/aep_guidelines.md) which also act as a template for new AEPs. 
