@@ -1,6 +1,6 @@
 # AiiDA Enhancement Proposal (AEP) Guidelines
 
-| AEP number | 0                                                            |
+| AEP number | 000                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | AiiDA Enhancement Proposal (AEP) Guidelines                  |
 | Authors    | [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) (kjappelbaum), [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)|
@@ -31,7 +31,8 @@ Should be short and uniquely identify the proposed enhancement
 #### Header table
 
 A table containing:
-  * AEP number: numbered consecutively by submission date
+  * AEP number: numbered consecutively by submission date. The number should be padded 
+    with leading zeros to convert the number to a three digiti number.
   * title
   * authors: preferably with GitHub user names
   * champions: individuals willing to take care of implementing the AEP

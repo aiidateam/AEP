@@ -14,7 +14,7 @@ ecosystem and to document the decision making process.
 
 | Number | Status           | Title                                                            |
 |--------|------------------|------------------------------------------------------------------|
-| 0      |active            | [AEP guidelines](0_aep_guidelines/aep_guidelines.md)             | 
+| 000    |active            | [AEP guidelines](0_aep_guidelines/aep_guidelines.md)             | 
 
 ## Submitting an AEP
 The submission process is described in the [AEP guidelines](0_aep_guidelines/aep_guidelines.md) which also act as a template for new AEPs. 
