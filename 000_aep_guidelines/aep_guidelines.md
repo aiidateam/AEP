@@ -61,7 +61,7 @@ An abstract (1-2 sentences) of the proposed enhancement, ideally containing (pse
 
 #### Detailed Explanation
 
-A detailed discussion about all relevant technical information, possible API designs.
+A detailed discussion about all relevant technical information, possible API designs and transition plans.
 
 #### Pros and Cons
 
@@ -75,8 +75,11 @@ A summary for pros and cons for the proposed enhancement, detailing e.g. which p
      * You may use the `aep_guidelines.md` as a template.
      * You may use the folder to include additional files relevant to your enhancement proposal.
      * Add your AEP to the `README.md` at the top level of the repository.
+     * Consider discussing your proposal informally with an [AiiDA team](https://github.com/orgs/aiidateam/people) member to get an initial reaction
+       and, potentially, another champion for your proposal.
 3. Commit your changes and submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the AEP repository
      * Apply appropriate type and status labels to your pull request.
+
 
 At this point, your pull request will start to be reviewed by members of the [AiiDA team](https://github.com/orgs/aiidateam/people).
 If possible, new AEPs should be presented by one of its champions at one of the periodic AiiDA developer meetings (per video conference or in person).
@@ -86,9 +89,11 @@ If your AEP is accepted, the status will change to `active` and you can start wo
 ## Pros and Cons 
 
 ### Pros
-* Public discussion of design goals and implementation that is open to input from the entire AiiDA community
-* Structures the discussion, providing basic guidance on how to "make a case" for an enhancement
-* Public record of decision process 
+* The public discussion of enhancement proposals lets the entire AiiDA community see what developments lie ahead
+  and allows those interested to actively participate in shaping them
+* AEPs provide basic guidance on how to "make a case" for an enhancement such that it can be seriously discussed
+  before investing efforts in its implementation
+* The corresponding pull requests provide a public record of the decision process in case questions arise later
 
 ### Cons
-* Slightly increased overhead compared to an informal Google doc
+* Slightly increased overhead compared to an informal email trail or a Google document
