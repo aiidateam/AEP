@@ -71,8 +71,8 @@ A summary for pros and cons for the proposed enhancement, detailing e.g. which p
 
 1. [Fork](https://help.github.com/en/articles/fork-a-repo) this repository
 2. Create a folder with the title of the AEP in lower [snake-case](https://en.wikipedia.org/wiki/Snake_case)
-   and put a [Markdown](https://guides.github.com/features/mastering-markdown/) file with the title of the AEP in lower case inside this folder.
-     * You may use the `aep_guidelines.md` as a template.
+   and put readme file in [Markdown](https://guides.github.com/features/mastering-markdown/) format inside this folder.
+     * You may use this `readme.md` as a template.
      * You may use the folder to include additional files relevant to your enhancement proposal.
      * Add your AEP to the `README.md` at the top level of the repository.
      * Consider discussing your proposal informally with an [AiiDA team](https://github.com/orgs/aiidateam/people) member to get an initial reaction
