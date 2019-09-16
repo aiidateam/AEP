@@ -13,10 +13,10 @@
 Given that AiiDA has a number of software and service dependencies that can be met in different ways, suggesting an "officially supported" toolchain for testing AiiDA plugins would make the life of plugin developers easier.
 
 This comprises two components:
- 1. Suggestions on how to test plugins locally (and manually)
- 2. Suggestions on how to test plugins on how to test plugins on CI platforms, ideally enabling automatic testing of the plugin when a new version of AiiDA is released.
+ 1. Suggestions on how to test plugins locally (and manually).
+ 1. Suggestions on how to test plugins on CI platforms, ideally enabling automatic testing of the plugin when a new version of AiiDA is released.
 
-2. would help to address an important question of AiiDA users, namely: will plugin X work with AiiDA version Y?
+1. Would help to address an important question of AiiDA users, namely: will plugin X work with AiiDA version Y?
 
 ## Proposed Enhancement 
 
