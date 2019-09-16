@@ -71,7 +71,8 @@ Note: When plugins include "runnable examples", those can also be included in th
 import click 
 
 def test_example(aiida_code):
-    # encapsulate example inside this function
+    # Encapsulate example inside this function.
+    # Can be run both via pytest and from the terminal.
     qe_code = aiida_code('pw.x', 'quantumespresso.pw')
     # use code ...
 
