@@ -112,7 +112,7 @@ One way of doing this is to require plugin developers to put a `Dockerfile` into
 A `Dockerfile` could look as follows (see [here](https://github.com/aiidateam/aiida-cp2k/blob/develop/Dockerfile) for earlier attempts):
 ```docker
 # You can select the base image tag when building this image:
-# docker build -t cp2k-docker --build-arg AIIDA_DOCKER_STACK_TAG=1.0.0b6 .
+# docker build -t aiida-cp2k-docker-stack --build-arg AIIDA_DOCKER_STACK_TAG=1.0.0b6 .
 ARG AIIDA_DOCKER_STACK_TAG=latest
 FROM aiidateam/aiida-docker-stack:$AIIDA_DOCKER_STACK_TAG
 
@@ -124,31 +124,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends  \
 ENV HOME="/home/aiida"
 
 # Copy aiida-cp2k
-COPY . ${HOME}/code/aiida-cp2k
-RUN chown -R aiida:aiida ${HOME}/code
-
-# Install aiida-cp2k
-USER aiida
-ENV PATH="${HOME}/.local/bin:${PATH}"
-WORKDIR ${HOME}/code/aiida-cp2k
-RUN pip install --user .[pre-commit,test]
-
-# Populate reentry cache for aiida user https://pypi.python.org/pypi/reentry/
-RUN reentry scan
-
-# Change workdir back to $HOME
-WORKDIR ${HOME}
+RUN mkdir -p ${HOME}/plugin
+RUN chown -R aiida:aiida ${HOME}/plugin
+WORKDIR ${HOME}/plugin
 
 # Important to end as user root!
 USER root
 
-# Use baseimage-docker's init system.
+# Use phusion baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 ```
 
 The tests would be run by executing something like
 ```
-docker run --user aiida cp2k-docker pytest
+docker run -v .:/home/aiida/plugin aiida-cp2k-docker-stack -t test-container
+docker exec --user aiida test-container pip install --user .[pre-commit,test]
+docker exec --user aiida test-container reentry scan
+docker exec --user aiida test-container py.test --cov aiida_cp2k --cov-append .
 ```
 
 ## Pros and Cons 
@@ -163,6 +155,4 @@ docker run --user aiida cp2k-docker pytest
  * from the AiiDA registry perspective, there is no way to enforce the *actual* environment used for testing (e.g. plugins could inadvertedly install a different version of aiida-core). one could check this by running a `pip freeze` first, though.
 
 ## Open questions
- * should the plugin folder be mounted inside the docker container instead of copying it there?
-   this would avoid rebuilds when changing the plugin code (but would make the docker commands more complicated)
  * are there viable alternatives to using a Dockerfile for performing the "on top" modifications?
