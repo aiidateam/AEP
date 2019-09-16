@@ -32,11 +32,16 @@ It introduces the minimal standardization necessary to enable automating testing
 
 In the following, we go into detail on each of these points.
 
-### 0. dependency specification
+### 0. package conventions
 
-We should suggest a standard name for the `extra` that installs dependencies necessary for testing.
-
-`aiida-core` uses `testing`, so let's stick with this, e.g.  `pip install aiida-cp2k[testing]`.
+ * We should suggest a standard name for the `extra` that installs dependencies necessary for testing.  
+   `aiida-core` uses `testing`, so let's stick with this, e.g.  `pip install aiida-cp2k[testing]`.
+ * It would be helpful to suggest a default folder layout. E.g.
+   ```
+   aiida_cp2k/
+   tests/
+   examples/
+   ```
 
 ### 1. pytest
 
@@ -162,3 +167,4 @@ docker exec --user aiida test-container py.test --cov aiida_cp2k --cov-append .
 
 ## Open questions
  * are there viable alternatives to using a Dockerfile for performing the "on top" modifications?
+ * folder layout: there's always the question of putting tests into a separate folder vs `aiida_cp2k/tests` (or even having the `test_functionality.py` in the same folder as `functionality.py`). Both have up- and downsides.
