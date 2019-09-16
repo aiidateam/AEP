@@ -32,6 +32,12 @@ It introduces the minimal standardization necessary to enable automating testing
 
 In the following, we go into detail on each of these points.
 
+### 0. dependency specification
+
+We should suggest a standard name for the `extra` that installs dependencies necessary for testing.
+
+`aiida-core` uses `testing`, so let's stick with this, e.g.  `pip install aiida-cp2k[testing]`.
+
 ### 1. pytest
 
 We've had good experiences with pytest so far, and a survey in 2018 showed that most externally developed plugins were using pytest anyhow. 
@@ -138,7 +144,7 @@ CMD ["/sbin/my_init"]
 The tests would be run by executing something like
 ```
 docker run -v .:/home/aiida/plugin aiida-cp2k-docker-stack -t test-container
-docker exec --user aiida test-container pip install --user .[pre-commit,test]
+docker exec --user aiida test-container pip install --user -e .[pre-commit,testing]
 docker exec --user aiida test-container reentry scan
 docker exec --user aiida test-container py.test --cov aiida_cp2k --cov-append .
 ```
