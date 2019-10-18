@@ -1,25 +1,22 @@
 # AiiDA Enhancement Proposals (AEPs)
 
-This repository contains enhancement proposals for [AiiDA](https://www.aiida.net) (AiiDA
-enhancement proposals = AEPs), similar to
-[PEPs](https://www.python.org/dev/peps/) of the python core language but
-less 'formalized' and closer to the way the [Jupyter project deals
-with enhancement proposals](https://github.com/jupyter/enhancement-proposals).
+This repository contains enhancement proposals for [AiiDA](https://www.aiida.net) (AiiDA enhancement proposals = AEPs).
+It is similar to [PEPs](https://www.python.org/dev/peps/) of the Python core language but less 'formalized' and closer to the way the [Jupyter project](https://github.com/jupyter/enhancement-proposals) deals with enhancement proposals.
 
-The purpose is to publicly discuss new features & design choices in the AiiDA
-ecosystem and to document the decision making process.
+The purpose is to publicly discuss new features & design choices in the AiiDA ecosystem and to document the decision making process.
 
 ## Index of AEPs
 
-| Number | Status           | Title                                                            |
-|--------|------------------|------------------------------------------------------------------|
-| 000    | active           | [AEP guidelines](000_aep_guidelines/readme.md)                   |
-| 001    | implemented      | [Drop support for Python 2.7](001_drop_python2/readme.md)                 |
-| 002    | implemented      | [AiiDA Dependency Management](002_dependency_management/readme.md)        |
-| 003    | active           | [Adopt NEP 29](003_adopt_nep_29/readme.md)                                |
-| 004    | implemented      | [Infrastructure for importing completed `CalcJob`s](004_calcjob_importer/readme.md)                                |
-| 005    | draft            | [New Export Format](005_exportformat/readme.md)                           |
-| 006    | implemented      | [Efficient object store for the AiiDA repository](006_efficient_object_store_for_repository/readme.md)        |
+| Number | Status           | Title                                                                                                  |
+|--------|------------------|--------------------------------------------------------------------------------------------------------|
+| 000    | active           | [AEP guidelines](000_aep_guidelines/readme.md)                                                         |
+| 001    | implemented      | [Drop support for Python 2.7](001_drop_python2/readme.md)                                              |
+| 002    | implemented      | [AiiDA Dependency Management](002_dependency_management/readme.md)                                     |
+| 003    | active           | [Adopt NEP 29](003_adopt_nep_29/readme.md)                                                             |
+| 004    | implemented      | [Infrastructure for importing completed `CalcJob`s](004_calcjob_importer/readme.md)                    |
+| 005    | draft            | [New Export Format](005_exportformat/readme.md)                                                        |
+| 006    | implemented      | [Efficient object store for the AiiDA repository](006_efficient_object_store_for_repository/readme.md) |
+| 007    | implemented      | [Abstract and improve the file repository](007_improved_file_repository/readme.md)                     |
 
 ## Submitting an AEP
 
