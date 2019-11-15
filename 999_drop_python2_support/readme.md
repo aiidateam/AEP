@@ -1,99 +1,67 @@
 # AiiDA Enhancement Proposal (AEP) Guidelines
 
-| AEP number | 000                                                          |
+| AEP number | 999                                                          |
 |------------|--------------------------------------------------------------|
-| Title      | AiiDA Enhancement Proposal (AEP) Guidelines                  |
-| Authors    | [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) (kjappelbaum), [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)|
-| Champions  | [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) (kjappelbaum), [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)|
+| Title      | Drop of support for Python 2.7                               |
+| Authors    | [Carl Simon Adorf](mailto:simon.adorf@epfl.ch) (csadorf)     |
 | Type       | P - Process                                                  |
-| Created    | 19-Mar-2019                                                  |
-| Status     | active                                                       |
+| Created    | 15-Nov-2019                                                  |
+| Status     | submitted                                                    |
 
-## Background 
-The AiiDA ecosystem with its plugins is growing beyond the bounds of EPFL
-and would benefit from a public discussion of design issues that can bring 
-all stakeholders to the table, while also serving as a documentation of the decision process.
+## Background
 
-See also [PEP-1](https://www.python.org/dev/peps/pep-0001/) for the rationale behind
-introducing enhancement proposals for the python project. 
+The AiiDA core package has recently been released in version 1.0 with official support for Python versions 2.7 and >= 3.6.
+Python version 2.7 has been deprecated for a while and support will be dropped by 1-Jan-2020.
+The AiiDA team has stated previously that the support of AiiDA for Python 2.7 will dropped as of January 2020.
 
-## Proposed Enhancement 
-The AEP process will be used to propose and discuss new features and design decisions for the AiiDA project. 
-This file itself constitutes an AEP and can be used a template for new AEPs. 
+This AEP lays out a concrete roadmap as to how this drop of support will be accomplished while aiming to find a reasonable balance between disruption of user workflows, developer burden, and public appearance of the project.
 
-## Detailed Explanation 
-An AEP should contain the following elements:
+## Proposed Enhancement
 
-#### Title
+We propose the following schedule:
 
-Should be short and uniquely identify the proposed enhancement
+ * Dec 1 2020: The development of new features with support for Python 2.7 is discontinued.
+   Any new features must be released as part of the 2.x line.
+ * Jan 1 2020: The support for Python 2.7 is officially discontinued.
+   *Important* security and bug fixes are released on the 1.x line.
+ * Jul 1 2020: Security and bug fix releases for the 1.x release line are  discontinued.
 
-#### Header table
+While strictly not required, we recommend a moratorium on minor releases until 1-Mar-2020, to reduce user confusion with respect to package versioning.
 
-A table containing:
-  * AEP number: numbered consecutively by submission date. The number should be padded 
-    with leading zeros to convert the number to a three digiti number.
-  * title
-  * authors: preferably with GitHub user names
-  * champions: individuals willing to take care of implementing the AEP
-  * type: one of
-    * `S - Standard Track AEP`: describes new features or changes to AiiDA
-    * `I - Informational AEP`: describes design issues or best practice. A notable informational PEP is [the Zen of Python](https://www.python.org/dev/peps/pep-0020/)
-    * `P - Process AEP`: describes changes to processes in the AiiDA ecoystem, such as a change to the decision making or development process (e.g. new standards for commit messages)
-  * creation date
-  * status: one of
-    * `submitted` - this should be the initial status when submitting the pull request to the AEP repository
-    * `active` - this AEP has been accepted and people are actively discussing and implementing it
-    * `implemented` - this AEP has been implemented
-    * `postponed` - this AEP is no longer active, might be interesting for the project but has noone willing to champion it
-    * `rejected` - this AEP has been rejected and will not be implemented
-    * `withdrawn` - this AEP has been withdrawn by the submitter but can be re-submitted if someone is willing to champion it
+## Detailed Explanation
 
-![AEP submission process](aep_diagram.png) 
+The decision to discontinue the development of new features with support for Python 2.7 with almost immediate effect is highly justified, because this impending change has been announced to the community for a long time.
+The support of Python version 2.7 is therefore considered deprecated already as of AiiDA version 1.0.
+The announcement within the change log or through the use of programmatic warnings in sense of the emission of `DeprecationWarnings` or similar should therefore be considered as additional reminders to users about this policy.
 
-#### Background
+Furthermore, an expedited deprecation and drop of support for Python 2.7 is warranted, because the Python library ecosystem has rapidly evolved in the past year with more and more prominent projects not only [pledging to discontinue the support for Python 2.7](https://python3statement.org/), but [actively](https://docs.scipy.org/doc/numpy/release.html#numpy-1-17-0-release-notes) [dropping](https://scikit-learn.org/stable/whats_new.html#version-0-20-0) [that](https://docs.djangoproject.com/en/2.2/releases/2.0/) [support](https://matplotlib.org/3.0.0/api/api_changes.html?highlight=python#api-changes-for-3-0-0) [even in minor releases](https://docs.scipy.org/doc/scipy/reference/release.1.3.0.html) as well.
+This has not only massively increased the pressure on users to update their tool chains, but also makes it excruciatingly more difficult to maintain support for Python 2.7 for AiiDA.
 
-A description of the problem, e.g. containing a snippet of code that show an issue or bad design.
+There might be some expectation from users that a major version increase may imply a major change in feature set, however, we believe that the potential user confusion is far outweighed by the benefits of the expedited drop of support for Python 2.7.
+Furthermore, confusion can be reduced through transparent communication of the policy on the mailing list and as part of the change log.
+Finally, confusion might be reduced by postponing the release of the 2.x line until 1-Mar-2020.
 
-#### Proposed Enhancement
+## Alternatives
 
-An abstract (1-2 sentences) of the proposed enhancement, ideally containing (pseudo)code samples describing the solution.
+  * Drop of support with the next minor release.
 
-#### Detailed Explanation
+    This policy should be considered since it might be less confusing to users and it could be argued that it [does not violate](https://semver.org/#what-should-i-do-if-i-update-my-own-dependencies-without-changing-the-public-api) the stipulation of [semantic versioning](https://semver.org/#summary).
+    Semantic versioning requires a major release for backwards incompatible API changes, however the drop of support of deprecated dependencies does arguably not fall into that category.
+    While it is true that many major Python packages decided to drop the support in conjunction with a major version increase, there are also examples to the contrary, for example the Scipy package largely follows semantic versioning and dropped support for Python 3.7 with version 1.3 (see link above).
 
-A detailed discussion about all relevant technical information, possible API designs and transition plans.
+  * Continue feature development support for Python 2.7 beyond Jan 1 2020.
 
-#### Pros and Cons
+    Such a policy would be in direct contradiction to previous announcements and would bind significant amount of development resources.
+    Furthermore any new feature could only depend on libraries and other packages that also still support Python version 2.7, which becomes more and more difficult.
 
-A summary for pros and cons for the proposed enhancement, detailing e.g. which possible compatibility issues may arise.
-
-### How to submit an AEP
-
-1. [Fork](https://help.github.com/en/articles/fork-a-repo) this repository
-2. Create a folder with the title of the AEP in lower [snake-case](https://en.wikipedia.org/wiki/Snake_case)
-   and put readme file in [Markdown](https://guides.github.com/features/mastering-markdown/) format inside this folder.
-     * You may use this `readme.md` as a template.
-     * You may use the folder to include additional files relevant to your enhancement proposal.
-     * Add your AEP to the `README.md` at the top level of the repository.
-     * Consider discussing your proposal informally with an [AiiDA team](https://github.com/orgs/aiidateam/people) member to get an initial reaction
-       and, potentially, another champion for your proposal.
-3. Commit your changes and submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the AEP repository
-     * Apply appropriate type and status labels to your pull request.
-
-
-At this point, your pull request will start to be reviewed by members of the [AiiDA team](https://github.com/orgs/aiidateam/people).
-If possible, new AEPs should be presented by one of its champions at one of the periodic AiiDA developer meetings (per video conference or in person).
-
-If your AEP is accepted, the status will change to `active` and you can start working on completing its implementation.
-
-## Pros and Cons 
+## Pros and Cons
 
 ### Pros
-* The public discussion of enhancement proposals lets the entire AiiDA community see what developments lie ahead
-  and allows those interested to actively participate in shaping them
-* AEPs provide basic guidance on how to "make a case" for an enhancement such that it can be seriously discussed
-  before investing efforts in its implementation
-* The corresponding pull requests provide a public record of the decision process in case questions arise later
+
+  * Discontinuing the development of new features with support for Python 2.7 is easier now then later, since AiiDA version 1.0 was very recently released, presenting a clear cut in terms of feature development.
+  * Discontinuing the development of new features with support for Python 2.7 will make it easier to relax dependency requirements and make certain novel feature development possible in the first place.
+  * Continuing feature development support beyond Jan-1-2020 violates the AiiDA team's own agenda and will set false expectations within the developer and user community.
 
 ### Cons
-* Slightly increased overhead compared to an informal email trail or a Google document
+
+  * Some users might be confused by the major version increase relatively shortly after the release of version 1.0 and might expect a major change in feature set and possibly backwards incompatible changes.
