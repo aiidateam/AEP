@@ -21,7 +21,7 @@ This AEP lays out a concrete roadmap as to how this drop of support will be acco
 We propose the following schedule:
 
  * Dec 1 2020: The development of new features with support for Python 2.7 is discontinued.
-   Any new features must be released as part of the 2.x line.
+   Any new features must be released as part of the AiiDA 2.x line.
  * Jan 1 2020: The support for Python 2.7 is officially discontinued.
    *Important* security and bug fixes are released on the 1.x line.
  * Mar 1 2020: The recommended moratorium on minor releases ends.
