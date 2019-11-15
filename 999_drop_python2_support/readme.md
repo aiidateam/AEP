@@ -25,7 +25,7 @@ We propose the following schedule:
  * Jan 1 2020: The support for Python 2.7 is officially discontinued.
    *Important* security and bug fixes are released on the 1.x line.
  * Mar 1 2020: The recommended moratorium on minor releases ends.
- * Jul 1 2020: Security and bug fix releases for the 1.x release line are  discontinued.
+ * Jul 1 2020: Security and bug fix releases for the AiiDA 1.x release line are  discontinued.
 
 The recommended moratorium on minor releases is supposed to reduce the potential for user confusion with respect to a change in feature set or potential backwards incompatibilities.
 However, the AiiDA team should revisit this policy with every new feature development and decide whether an immediate release of set feature outweighs the benefits of the moratorium.
