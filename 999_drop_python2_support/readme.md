@@ -23,7 +23,7 @@ We propose the following schedule:
  * Dec 1 2020: The development of new features with support for Python 2.7 is discontinued.
    Any new features must be released as part of the AiiDA 2.x line.
  * Jan 1 2020: The support for Python 2.7 is officially discontinued.
-   *Important* security and bug fixes are released on the 1.x line.
+   *Important* security and bug fixes are released on the AiiDA 1.x line.
  * Mar 1 2020: The recommended moratorium on minor releases ends.
  * Jul 1 2020: Security and bug fix releases for the AiiDA 1.x release line are  discontinued.
 
