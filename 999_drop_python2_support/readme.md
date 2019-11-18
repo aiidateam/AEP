@@ -1,9 +1,10 @@
-# AiiDA Enhancement Proposal (AEP) Guidelines
+# Drop support for Python 2.7
 
-| AEP number | 999                                                          |
+| AEP number | 300                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | Drop of support for Python 2.7                               |
 | Authors    | [Carl Simon Adorf](mailto:simon.adorf@epfl.ch) (csadorf)     |
+| Champions  | [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)    |
 | Type       | P - Process                                                  |
 | Created    | 15-Nov-2019                                                  |
 | Status     | submitted                                                    |
