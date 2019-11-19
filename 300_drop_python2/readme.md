@@ -59,7 +59,7 @@ It would be highly confusing to users to release a version 2.0 relatively shortl
 
   * Discontinuing the development of new features with support for Python 2.7 is easier now then later, since AiiDA version 1.0 was very recently released, presenting a clear cut in terms of feature development.
   * Discontinuing the development of new features with support for Python 2.7 will make it easier to relax dependency requirements and make certain novel feature development possible in the first place.
-  * Continuing feature development support beyond Jan-1-2020 violates the AiiDA team's own agenda and will set false expectations within the developer and user community.
+  * Continuing feature development support beyond Jan 1 2020 violates the AiiDA team's own agenda and will set false expectations within the developer and user community.
 
 ### Cons
 
