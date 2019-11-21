@@ -101,17 +101,17 @@ Whenever a new version of a dependency is released, the DM is expected to react 
 
   Further, the DM should consider placing the affected dependency on the *problematic dependencies* watch list.
 
-    *Example: A package follows semantic versioning, but a new minor or patch release inadvertently introduces backwards incompatible changes.*
+  *Example: A package follows semantic versioning, but a new minor or patch release inadvertently introduces backwards incompatible changes.*
 
   2. If the new version is **considered incompatible, but tests pass** and there is no indication of undetected incompatibilities, the DM should
       * update the requirements and
       * recommend a **patch** release.
 
-    *Example: A new version of numpy is released, tests pass, and there is no reason to suspect that there are undetected incompatibilities.*
+  *Example: A new version of numpy is released, tests pass, and there is no reason to suspect that there are undetected incompatibilities.*
 
   3. If the new version is **considered incompatible and tests fail** or there is indication of undetected incompatibilities, the DM should **open an issue**.
 
-    *Example: A new Python minor version was released and tests fail or the release notes indicate that that there might be problematic backwards incompatible changes.*
+  *Example: A new Python minor version was released and tests fail or the release notes indicate that that there might be problematic backwards incompatible changes.*
 
 This is a visualization of the process outlined above:
 ![Workflow](workflow.png)
