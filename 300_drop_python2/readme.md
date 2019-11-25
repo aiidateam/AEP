@@ -11,7 +11,7 @@
 
 ## Background
 
-The AiiDA core package has recently been released in version 1.0 with official support for Python versions 2.7 and >= 3.6.
+The AiiDA core package has recently been released in version 1.0 with official support for Python versions 2.7 and >= 3.5.
 Python version 2.7 has been deprecated for a while and support will be dropped by 1-Jan-2020.
 The AiiDA team has stated previously that the support of AiiDA for Python 2.7 will dropped as of January 2020.
 
