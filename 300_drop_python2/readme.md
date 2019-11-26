@@ -21,10 +21,10 @@ This AEP lays out a concrete roadmap as to how this drop of support will be acco
 
 We propose the following schedule:
 
- * **Dec 1 2019**: The development of new features with support for Python 2.7 is discontinued.
- * **Jan 1 2020**: The support for Python 2.7 is officially discontinued.
+ * **1-Dec-2019**: The development of new features with support for Python 2.7 is discontinued.
+ * **1-Jan-2020**: The support for Python 2.7 is officially discontinued.
    *Important* security and bug fixes are released on the last AiiDA minor release line with Python 2.7 support.
- * **Jul 1 2020**: Security and bug fix releases on the last AiiDA minor release line with Python 2.7 support are discontinued.
+ * **1-Jul-2020**: Security and bug fix releases on the last AiiDA minor release line with Python 2.7 support are discontinued.
 
 ## Detailed Explanation
 
@@ -59,7 +59,7 @@ It would be highly confusing to users to release a version 2.0 relatively shortl
 
   * Discontinuing the development of new features with support for Python 2.7 is easier now then later, since AiiDA version 1.0 was very recently released, presenting a clear cut in terms of feature development.
   * Discontinuing the development of new features with support for Python 2.7 will make it easier to relax dependency requirements and make certain novel feature development possible in the first place.
-  * Continuing feature development support beyond Jan 1 2020 violates the AiiDA team's own agenda and will set false expectations within the developer and user community.
+  * Continuing feature development support beyond 1-Jan-2020 violates the AiiDA team's own agenda and will set false expectations within the developer and user community.
 
 ### Cons
 
