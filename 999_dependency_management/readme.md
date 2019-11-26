@@ -17,28 +17,29 @@ This AEP provides guidelines for the management of dependencies and largely appl
 ## Background
 
 The AiiDA applications, including the Aiida core package, rely on a multitude of additional libraries and programs that need to be installed within a given environment for a user to for example access an AiiDA database and to manage AiiDA workflows.
-These additional codes include service processes such as PostgreSQL or RabbitMQ, and Python packages such as *numpy* or *django*.
+These dependencies include service processes such as PostgreSQL or RabbitMQ, and Python packages such as *numpy* or *django*.
 
 The nature of the Python programming language (dynamically typed and interpreted) lends itself to rapid prototyping and fast-paced development, but it also makes it more vulnerable against unintended and undetected API incompatibilities within and between different Python codes.
-Ensuring compatibility between Python codes is therefore especially challenging, especially because many Python packages are not only developed fast, but also released frequently.
-Therefore, while the procedures proposed in this document are not limited to Python dependencies, special focus and care must be taken with respect to maintaining compatibility between the AiiDA Python codes and their Python dependencies.
+Ensuring compatibility between Python codes can therefore be challenging, especially because many Python packages are not only developing quickly, but also released frequently.
+Therefore, maintaining compatibility between the AiiDA Python codes and their Python dependencies deserves special focus (while the procedures proposed in this document are not limited to Python dependencies).
 
-The requirements for Python dependencies of the AiiDA-core package are currently manifested within the `setup.json` and `requirements.txt` file within the [repository](https://github.com/aiidateam/aiida-core)'s root directory as well as the [aiida-core-feedstock](https://github.com/conda-forge/aiida-core-feedstock/) recipe file for distribution *via* the conda-forge conda channel.
+Python dependencies of the AiiDA-core package are currently specified within the `setup.json` file within the [repository](https://github.com/aiidateam/aiida-core)'s root directory as well as the [aiida-core-feedstock](https://github.com/conda-forge/aiida-core-feedstock/) recipe file for distribution *via* the conda-forge conda channel.
 The vast majority of requirements are currently pinned to an exact version, that means for packages that follow [semantic versioning](https://semver.org/), to a specific patch version.
-This ensures that for users who install the package into a clean environment[^1], the installation process is highly reliable and reproducible.
-The exact combination of dependencies with pinned versions will likely have been tested as part of the standard AiiDA continuous integration (CI) test pipeline and the risk of installing a package that has introduced intentional or unintentional backwards incompatible changes is significantly reduced.
+This aims to make the installation process reliable and reproducible for users who install the package into a clean environment[^1].
+The combination of dependencies with pinned versions is tested as part of the standard AiiDA continuous integration (CI) test pipeline and the risk of installing a package that has introduced intentional or unintentional backwards incompatible changes is significantly reduced (but not zero [^2]).
 
-However, pinning requirements to an exact version also poses a strong constraint on the possible environment dependency solution, meaning that unsolvable conflicts are likely to occur whenever an additional code with its own separate set of dependencies is to be installed into the same environment.
+However, pinning requirements to an exact version imposes strong constraints on the possible environment dependency solution, meaning that unsolvable conflicts are likely to occur when additional codes with their own set of dependencies are to be installed into the same environment.
 Since AiiDA relies on a plugin package ecosystem to extend the functionality of the AiiDA core package and is supposed to be integrated into existing scientific workflows that string together the functionality of various different codes, such a scenario is common.
 
-In practice, users and developers will often be required to ignore certain dependency version constraints to be able to install a specific combination of Python packages at all, which places them at high risk of incompatibilities which might manifest in breaking workflows or potentially even data corruption.
-But even without these dire consequences, the necessity to ignore dependency constraints results in a poor developer and user experience.
+As of today, users and developers are then required to ignore certain dependency version constraints in order to be able to install a specific combination of Python packages.
+This necessity to ignore dependency constraints results in a poor developer and user experience and increases the risk of incompatibilities, potentially breaking workflows or even leading to data corruption.
 
 It is important to distinguish between the AiiDA core package and plugin packages with respect to how dependencies should be managed.
 The AiiDA core package presents a hybrid between an end-user application and a library that supports other applications, which makes dependency management for the core package indubitably more challenging.
-For plugin packages that are more likely to be installed and executed in isolation, pinning specific requirements is a reasonable approach to manage dependencies.
+For plugin packages that are more likely to be installed and executed in isolation, pinning specific requirements may be a reasonable approach to manage dependencies.
 
 [^1]: A clean environment in this context describes a Python environment that has only a minimal set of additional packages installed besides the Python interpreter itself.
+[^2]: The current pinning model does not prevent upgrades in dependencies of dependencies.
 
 ## Proposed Enhancement
 
