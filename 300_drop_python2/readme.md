@@ -30,7 +30,7 @@ We propose the following schedule:
 
 The decision to discontinue the development of new features with support for Python 2.7 with almost immediate effect is highly justified, because this impending change has been announced to the community for a long time.
 The support of Python version 2.7 is therefore considered deprecated already as of AiiDA version 1.0.
-The announcement within the change log or through the use of programmatic warnings in sense of the emission of `DeprecationWarnings` or similar should therefore be considered as additional reminders to users about this policy.
+The announcement within the change log or through the use of programmatic warnings in the sense of the emission of `DeprecationWarnings` or similar should therefore be considered as additional reminders to users about this policy.
 
 Furthermore, an expedited deprecation and drop of support for Python 2.7 is warranted, because the Python library ecosystem has rapidly evolved in the past year with many prominent projects not only [pledging to discontinue the support for Python 2.7](https://python3statement.org/), but [actively](https://docs.scipy.org/doc/numpy/release.html#numpy-1-17-0-release-notes) [dropping](https://scikit-learn.org/stable/whats_new.html#version-0-20-0) [that](https://docs.djangoproject.com/en/2.2/releases/2.0/) [support](https://matplotlib.org/3.0.0/api/api_changes.html?highlight=python#api-changes-for-3-0-0) [even in minor releases](https://docs.scipy.org/doc/scipy/reference/release.1.3.0.html) as well.
 This has not only massively increased the pressure on users to update their tool chains, but also makes it excruciatingly more difficult to maintain support for Python 2.7 for AiiDA.
