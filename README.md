@@ -15,7 +15,7 @@ ecosystem and to document the decision making process.
 | Number | Status           | Title                                                            |
 |--------|------------------|------------------------------------------------------------------|
 | 000    | active           | [AEP guidelines](000_aep_guidelines/readme.md)                   | 
-| 999    | submitted        | [Drop support for Python 2.7](999_drop_python2_support/)         |
+| 001    | active           | [Drop support for Python 2.7](001_drop_python2/)                 |
 
 ## Submitting an AEP
 The submission process is described in the [AEP guidelines](000_aep_guidelines/readme.md) which also act as a template for new AEPs. 
