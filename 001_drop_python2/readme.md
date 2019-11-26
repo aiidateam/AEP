@@ -1,6 +1,6 @@
 # Schedule for drop of support of Python 2.7
 
-| AEP number | 300                                                          |
+| AEP number | 001                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | Schedule for drop of support for Python 2.7                  |
 | Authors    | [Carl Simon Adorf](mailto:simon.adorf@epfl.ch) (csadorf)     |
