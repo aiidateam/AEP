@@ -1,8 +1,7 @@
-# AiiDA Enhancement Proposal (AEP) Guidelines
+# AiiDA Dependency Management
 
 | AEP number | 999                                                          |
 |------------|--------------------------------------------------------------|
-| Title      | AiiDA Enhancement Proposal (AEP) Guidelines                  |
 | Title      | AiiDA Dependency Management                                  |
 | Authors    | [Carl S. Adorf](mailto:simon.adorf@epfl.ch) (csadorf)        |
 | Champions  | [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)    |
