@@ -74,7 +74,7 @@ The DM can delegate specific tasks at any time.
 
 ### Python Dependency Specification
 
-To alleviate the issues that come with pinning requirements without sacrificing the benefits of providing a concrete environment for the AiiDA core package, we propose a dual approach for dependency specification:
+To alleviate the issues that come with pinning requirements without sacrificing the benefits of providing a concrete environment for the AiiDA core package, we propose the [officially recommended dual approach](https://packaging.python.org/discussions/install-requires-vs-requirements/) for dependency specification:
 
   1. The package dependencies are specified with the maximal deemed compatible range with liberal use of the [compatible release](https://www.python.org/dev/peps/pep-0440/#compatible-release) operator: `~=`. The dependencies are specified within the `setup.py` file (or equivalent) within the repository root directory; from here on referred to as *requirements*.
   2. A specifically tested environment with all pinned requirements is documented within the `requirements.txt` file (or equivalent); from here on referred to as *pinned requirements*.
