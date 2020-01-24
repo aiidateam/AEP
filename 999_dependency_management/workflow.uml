@@ -8,12 +8,12 @@ if (Considered compatible?) then (yes)
   if (Appears compatible?) then (yes)
   else (no)
     :File issue;
-    :Update requirements;
+    :Update dependencies;
     :Recommend hotfix release;
   endif
 else (no)
   if (Appears compatible?) then (yes)
-    :Update requirements;
+    :Update dependencies;
     :Recommend patch release;
   else (no)
     :File issue;

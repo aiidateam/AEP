@@ -76,11 +76,11 @@ The DM can delegate specific tasks at any time.
 
 To alleviate the issues that come with pinning requirements without sacrificing the benefits of providing a concrete environment for the AiiDA core package, we propose the [officially recommended dual approach](https://packaging.python.org/discussions/install-requires-vs-requirements/) for dependency specification:
 
-  1. The package dependencies are specified with the maximal deemed compatible range with liberal use of the [compatible release](https://www.python.org/dev/peps/pep-0440/#compatible-release) operator: `~=`. The dependencies are specified within the `setup.py` file (or equivalent) within the repository root directory; from here on referred to as *requirements*.
-  2. A specifically tested environment with all pinned requirements is documented within the `requirements.txt` file (or equivalent); from here on referred to as *pinned requirements*.
+  1. The package installation dependencies are specified with the maximal deemed compatible range with liberal use of the [compatible release](https://www.python.org/dev/peps/pep-0440/#compatible-release) operator: `~=`. The installation dependencies are specified within the `setup.py` file (or equivalent) within the repository root directory; from here on referred to as *dependencies*. Installation dependencies are not automatically generated, but must be managed manually by the DM. This also means that the DM must be involved for *all* changes to the installation dependencies.
+  2. A specifically tested environment with all pinned requirements is documented within the `requirements.txt` file (or equivalent); from here on referred to as *pinned requirements*. The `requirements.txt` file must be re-generated whenever the installation dependencies are changed, prior to a release, and whenever deemed appropriate by the DM.
 
 The CI test pipeline for release branches is to be executed for both specifications.
-The first one to detect unexpected incompatibilities, the second one to determine the concrete set of tested dependency versions.
+The first one to detect unexpected incompatibilities with the latest release version of the dependencies, the second one to test against a well-defined Python environment a user could recreate in an isolated environment.
 
 This approach allows for more flexibility when installing the package into a given environment with either `pip install` or `python setup.py install`, but also provides users an option to install the package with a known set of tested dependencies, *e.g.*, with `pip install -r requirements.txt`.
 
@@ -96,7 +96,7 @@ Whenever a new version of a dependency is released, the DM is expected to react 
   1. If the new version is **considered compatible, but tests fail** or if there is indication of undetected incompatibilities, the DM must
 
       * open an issue,
-      * update the requirements, and
+      * update the installation dependencies, and
       * recommend an immediate **hotfix** release.
 
   Further, the DM should consider placing the affected dependency on the *problematic dependencies* watch list.
@@ -104,7 +104,7 @@ Whenever a new version of a dependency is released, the DM is expected to react 
   *Example: A package follows semantic versioning, but a new minor or patch release inadvertently introduces backwards incompatible changes.*
 
   2. If the new version is **considered incompatible, but tests pass** and there is no indication of undetected incompatibilities, the DM should
-      * update the requirements and
+      * update the installation dependencies and
       * recommend a **patch** release.
 
   *Example: A new version of numpy is released, tests pass, and there is no reason to suspect that there are undetected incompatibilities.*
@@ -130,7 +130,7 @@ In all cases, the constraint on the dependency version must be left in place unt
 ### Pros
 
  - Introducing an explicit *dependency manager* role makes it easier to define and distribute responsibilities.
- - Relaxing the strict constraints on the dependency versions will simplify the installation of the AiiDA core package in non-clean Python environments and might make it possible in the first place where conflicting version constraints can not be resolved.
+ - Relaxing the strict constraints on the dependency versions will simplify the installation of the AiiDA core package in non-isolated Python environments and might make it possible in the first place where conflicting version constraints can not be resolved.
  - Relaxing the strict constraints enables users to install later versions of packages and thus take advantage of security and bug fixes as well as newly introduced features, with better confidence that these later versions are actually compatible with the AiiDA core package.
  - Relaxing the strict constraints will make it easier to install the AiiDA core package with `conda` that is stricter than `pip` about the correct resolution of various dependencies within the same environment.
  - Maintaining a watch list of problematic dependencies will enable AiiDA maintainers to be more pro-active about reducing the dependence on problematic code bases.
