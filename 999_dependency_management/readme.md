@@ -79,6 +79,9 @@ To alleviate the issues that come with pinning requirements without sacrificing 
   1. The package installation dependencies are specified with the maximal deemed compatible range with liberal use of the [compatible release](https://www.python.org/dev/peps/pep-0440/#compatible-release) operator: `~=`. The installation dependencies are specified within the `setup.py` file (or equivalent) within the repository root directory; from here on referred to as *dependencies*. Installation dependencies are not automatically generated, but changes must be managed (or at least reviewed) manually by the DM. This also means that the DM must be involved for *all* changes to the installation dependencies.
   2. A specifically tested environment with all pinned requirements is documented within the `requirements.txt` file (or equivalent); from here on referred to as *pinned requirements*. The `requirements.txt` file must be re-generated whenever the installation dependencies are changed, prior to a release, and whenever deemed appropriate by the DM.
 
+Guidelines about tooling and the exact procedures for managing dependencies in the `setup.py` file and the generation of the `requirements.txt` file must be outlined in the wiki.
+The DM is responsible for keeping these pages up-to-date and ensuring that tooling and continuous integration pipelines are conform with these procedures.
+
 The CI test pipeline for release branches is to be executed for both specifications.
 The first one to detect unexpected incompatibilities with the latest release version of the dependencies, the second one to test against a well-defined Python environment a user could recreate in an isolated environment.
 
