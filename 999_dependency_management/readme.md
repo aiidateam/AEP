@@ -87,7 +87,7 @@ The first one to detect unexpected incompatibilities with the latest release ver
 
 This approach allows for more flexibility when installing the package into a given environment with either `pip install` or `python setup.py install`, but also provides users an option to install the package with a known set of tested dependencies, *e.g.*, with `pip install -r requirements.txt`.
 
-AiiDA plugin packages should provide a `setup.py` with dependencies specified as described above, e.g. `aiida-core~=1.0`. 
+AiiDA plugin packages should provide a `setup.py` with dependencies specified as described above, e.g., when a plugin was developed and tested with `aiida-core` version `1.0.1`, the dependency should be specified as `aiida-core~=1.0`. 
 For packages that have a clear end-user application character and are intended to be installed in isolation, developers may decide to pin the versions of selected dependencies more rigorously -- however, we recommend using a `requirements.txt` for such cases instead.
 
 ### Addressing Incompatibilities
