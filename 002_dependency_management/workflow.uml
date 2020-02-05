@@ -1,0 +1,23 @@
+@startuml
+start
+note
+  New version of
+  dependency is released
+end note
+if (Considered compatible?) then (yes)
+  if (Appears compatible?) then (yes)
+  else (no)
+    :File issue;
+    :Update dependencies;
+    :Recommend hotfix release;
+  endif
+else (no)
+  if (Appears compatible?) then (yes)
+    :Update dependencies;
+    :Recommend patch release;
+  else (no)
+    :File issue;
+  endif
+endif
+stop
+@enduml
