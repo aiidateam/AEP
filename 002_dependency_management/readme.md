@@ -1,13 +1,13 @@
 # AiiDA Dependency Management
 
-| AEP number | 999                                                          |
+| AEP number | 002                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | AiiDA Dependency Management                                  |
 | Authors    | [Carl S. Adorf](mailto:simon.adorf@epfl.ch) (csadorf)        |
 | Champions  | [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)    |
 | Type       | P - Process                                                  |
 | Created    | 18-Nov-2019                                                  |
-| Status     | submitted                                                    |
+| Status     | active                                                       |
 
 ## Scope
 
