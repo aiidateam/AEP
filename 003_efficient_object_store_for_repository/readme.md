@@ -140,11 +140,33 @@ the different requirements, and represent what can be found in the current imple
   The information for the offset and length of each pack is kept in a single SQLite
   database for the whole set of objects, as we describe below.
 
-- Packed objects can optionally be compressed. Note that compression is on a per-object level.
+- Packed objects can optionally be compressed. Note that compression is on a 
+  per-object level. The fact an object is compressed is stored in the index. When 
+  the users ask for an object, they always get back the uncompressed version (so
+  they don't have to worry if objects are compressed or not when retrieving them).
   This allows much greater flexibility, and avoid e.g. to recompress files that are already compressed.
   One could also think to clever logic ot heuristics to try to compress a file, but then store it
   uncompressed if it turns out that the compression ratio is not worth the time
   needed to further uncompress it later.
+  At the moment, one compression will be chosen and used by default (currently
+  zlib, but in issues it has been suggested to use more modern formats like
+  `xz`, or even better [snappy](https://github.com/google/snappy) that is very fast and designed for purposes
+  like this).
+  In the future, if we want, it would be easy to make the compression library
+  an option, and store this in the JSON that contains the settings of the
+  container.
+
+- A note on compression: the user can always compress objects first, and then store
+  a compressed version of them and take care of remembering if an object
+  was stored compressed or not. However, the implementation of compression 
+  directly in the object store, as described in the previous point, has the two advantages that compression is done only while packing, 
+  so there is no performance hit while just storing a new object, 
+  and that is completely transparent to the user (while packing, the user can 
+  decide to compress data or not; then, when retrieving an object from of the 
+  object store, there will not be any difference - except possibly speed in 
+  retrieving the data - because the API to retrieve the objects will be the same,
+  irrespective of whether the object has been stored as compressed or not;
+  and data is always returned uncompressed).
 
 - API exists both to get and write a single object but also, *importantly*, to write directly
   to pack files (this cannot be done by multiple processes at the same time, though),
@@ -188,7 +210,10 @@ the different requirements, and represent what can be found in the current imple
   a packing strategy that is efficient. Moreover, with the current packing strategy,
   it is immediate to know in which pack to check without having to keep also an index
   of the packs (this, however, would be possible to implement in case we want to extend the behavior,
-  since anyway we have an index file). But at the moment it does not seem necessary.
+  since anyway we have an index file). But at the moment it does not seem necessary. Possible future changes of the internal packing format should not
+  affect the users of the library, since users only ask to get an object by UUID,
+  and in general they do not need to know if they are getting a loose object,
+  a packed object, from which pack, ...
 
 - For each object, the SQLite database contains the following fields, that can be considered
   to be the "metadata" of the packed object: its key (`uuid`), the `offset` (starting
@@ -226,7 +251,7 @@ the different requirements, and represent what can be found in the current imple
   the disk space still occupied in the pack files.
 
 - The object store does not need to provide functionality to modify
-  a node. In AiiDA files of nodes are typically only added, and once
+  an object. In AiiDA, files of nodes are typically only added, and once
   added they are immutable (and very rarely they can be deleted).
   
   If modification is needed, this can be achieved by creation of a new
