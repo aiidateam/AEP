@@ -12,7 +12,7 @@
 ## Background 
 AiiDA writes the "content" of each node in two places: attributes in the database, and files
 (that do not need fast query) in a disk repository.
-These files include for instance raw inputs and otputs of a job calculation, but also other binary or
+These files include for instance raw inputs and outputs of a job calculation, but also other binary or
 textual information best stored directly as a file (some notable examples: pseudopotential files,
 numpy arrays, crystal structures in CIF format).
 
@@ -20,7 +20,7 @@ Currently, each of these files is directly stored in a folder structure, where e
 is based on the node UUID with two levels of sharding
 (that is, if the node UUID is `4af3dd55-a1fd-44ec-b874-b00e19ec5adf`,
 the folder will be `4a/f3/dd55-a1fd-44ec-b874-b00e19ec5adf`).
-Files of a nodes are stored within the node repository folder,
+Files of a node are stored within the node repository folder,
 possibly within a folder structure.
 
 While quite efficient when retrieving a single file
@@ -246,6 +246,26 @@ the different requirements, and represent what can be found in the current imple
   has to provide some guarantees e.g. on concurrent access.
   As a note, seeking a file to a given position is what one typically does when watching a 
   video and jumping to a different section.
+
+- Packing in general, at this stage, is left to the user. We can decide (at the object-store level, or probably
+  better at the AiiDA level) to suggest the user to repack, or to trigger the repacking automatically.
+  This can be a feature introduced at a second time. For instance, the first version we roll out could just suggest
+  to repack periodically in the docs to repack.
+  This could be a good approach, also to bind the repacking with the backing up (at the moment, 
+  probably backups need to be executed using appropriate scripts to backup the DB index and the repository
+  in the "right order", and possibly using SQLite functions to get a dump).
+  As a note, even if repacking is never done, the situation is anyway as the current one in AiiDA, and actually
+  a bit better because getting the list of files for a node without files wouldn't need anymore to access the disk,
+  and similarly there wouldn't be anymore empty folders created for nodes without files.
+  
+  In a second phase, we can print suggestions, e.g. when restarting the daemon,
+  that suggests to repack, for instance if the number of loose objects is too large. 
+  We can also provide `verdi` commands for this.
+
+  Finally, if we are confident that this approach works fine, we can also automate the repacking. We need to be careful
+  that two different processes don't start packing at the same time, and that the user is aware that packing will be
+  triggered, that it might take some time, and that the packing process should not be killed
+  (this might be inconvenient, and this is why I would think twice before implementing an automatic repacking).
 
 ### Why a custom implementation of the library
 We have been investigating if existing codes could be used for the current purpose.
