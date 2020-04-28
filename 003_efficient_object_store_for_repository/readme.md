@@ -50,8 +50,8 @@ We emphasize that having many inodes (files or folders) is a big problem. In par
 
 
 ## Proposed Enhancement 
-The goal of this project is to have a very efficient implementation of an "object store" that:
-- works directly on a disk folder;
+The goal of this project is to have a very efficient implementation of an "object store" (or, more correctly, a key-value store) that:
+- works directly on a disk folder (i.e. only requires access to a folder on a disk);
 - ideally, does not require a service to be running in the background,
   to avoid to have to ask users to run yet another service to use AiiDA;
 - and addresses a number of performance issues mentioned above and discussed more in detail below.
@@ -120,6 +120,8 @@ the different requirements, and represent what can be found in the current imple
   writers, the object store must guarantee that the central place is kept updated.
 
 - Packing can be triggered by the user periodically, whenever the user wants.
+  Here, and in the following, packing means bundling loose objects in a few
+  "pack" files, possibly (optionally) compressing the objects.
   It should be ideally possible to pack while the object store
   is in use, without the need to stop its use (which would in turn 
   require to stop the use of AiiDA and the deamons during these operations).
@@ -265,6 +267,10 @@ the different requirements, and represent what can be found in the current imple
   objects inside it, or removing deleted objects) this does not prevent efficient
   rsync transfer (this has been tested in the implementation).
 
+- Since it works on a filesystem backend, this would allow to use also other
+  tools, e.g. [`rclone`](https://rclone.org), to move the data to some different
+  backend (a "real" object store, Google Drive, or anything else).
+
 - Appending content to a single file does not prevent the Linux disk cache to work efficiently.
   Indeed, the caches are per blocks/pages in linux, not per file.
   Concatenating to files does not impact performance on cache efficiency. What is costly is opening a file as the filesystem
@@ -377,7 +383,11 @@ However, this poses a few of potential problem:
 
 ### Cons
 * Extreme care is needed to convince ourselves that there are no
-  bugs and no risk of corrupting or losing the users' data.
+  bugs and no risk of corrupting or losing the users' data. This is clearly
+  non trivial and requires a lot of work. Note, however, that if packing is
+  not performed, the performance will be the same as the one currently of AiiDA,
+  that stores essentially only loose objects. Risks of data corruption need
+  to be carefully assessed mostly while packing.
 * Object metadata must be tracked by the caller in some other database.
   Similarly, deduplication via SHA hashes is not implemented and need to be
   implemented by the caller.
