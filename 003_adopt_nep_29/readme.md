@@ -19,6 +19,23 @@ The [NumPy project](https://numpy.org/) has accepted the [NEP 29](https://numpy.
 
 This AEP proposed that the AiiDA ecosystem adopts the deprecation policy outlined in NEP 29.
 
+## Detailed Explanation
+
+After this AEP is accepted, AiiDA would adopt NEP 29 effectively on **2021-01-13** and enter a transition period with slightly adjusted support schedule until then:
+
+| Date           | Python | NumPy | NEP 29 compliant | adjusted
+-----------------|--------|-------|------------------|---------
+| 2020-09-13     | 3.6+   | 1.17+ | no               | no
+| **2021-01-13** | 3.7+   | 1.17+ | yes†             | **yes**‡
+| 2021-12-26     | 3.8+   | 1.18+ | yes              | no
+
+
+The adjusted support schedule reflects that dropping support for Python 3.5 on an adjusted schedule is not really necessary and schedules the drop of support for Python 3.6 to coincide with the scheduled drop of support for NumPy version 1.16 according to NEP 29 at which point AiiDA's support schedule would be in compliance with NEP 29.
+
+†) The current support of NumPy in aiida-core is defined as `~=1.17<1.18` which means that in order to be fully compliant with NEP 29, AiiDA will need to add support for later versions of NumPy by then.
+
+‡) The support for Python 3.6 was [previously announced](http://www.aiida.net/download/) to last until 2021-12-23.
+
 ## Pros and Cons
 
 ### Pros
