@@ -11,9 +11,9 @@
 
 ## Background 
 
-The aiida-core package is classified as a hybrid between a library and application and dependencies are kept as flexible as possible to allow the installation of the package within various Python software environments in combination with other libraries and applications, see [AEP 2](https://github.com/aiidateam/AEP/blob/master/002_dependency_management/readme.md) for details.
+The `aiida-core` package is classified as a hybrid between a library and application, and dependencies are kept as flexible as possible to allow the installation of the package within various Python software environments in combination with other libraries and applications, see [AEP 2](https://github.com/aiidateam/AEP/blob/master/002_dependency_management/readme.md) for details.
 
-The [NumPy project](https://numpy.org/) has accepted the [NEP 29](https://numpy.org/neps/nep-0029-deprecation_policy.html), which recommends that *all projects within the scientific Python ecosystem* adopt a common deprecation policy with respect to the range of minimally supported Python and Numpy versions.
+The [NumPy project](https://numpy.org/) has accepted the [Numpy Enhancement Proposal 29](https://numpy.org/neps/nep-0029-deprecation_policy.html) (NEP), which recommends that *all projects within the scientific Python ecosystem* adopt a common deprecation policy with respect to the range of minimally supported Python and Numpy versions.
 
 ## Proposed Enhancement 
 
@@ -21,7 +21,7 @@ This AEP proposed that the AiiDA ecosystem adopts the deprecation policy outline
 
 ## Detailed Explanation
 
-After this AEP is accepted, AiiDA would adopt NEP 29 effectively on **2021-01-13** and enter a transition period with slightly adjusted support schedule until then:
+After this AEP is accepted, AiiDA will effectively adopt NEP 29 on **2021-01-13** and enter a transition period with a slightly adjusted support schedule until then:
 
 | Date           | Python | NumPy | NEP 29 compliant | adjusted
 -----------------|--------|-------|------------------|---------
@@ -32,7 +32,7 @@ After this AEP is accepted, AiiDA would adopt NEP 29 effectively on **2021-01-13
 
 The adjusted support schedule reflects that dropping support for Python 3.5 on an adjusted schedule is not really necessary and schedules the drop of support for Python 3.6 to coincide with the scheduled drop of support for NumPy version 1.16 according to NEP 29 at which point AiiDA's support schedule would be in compliance with NEP 29.
 
-†) The current support of NumPy in aiida-core is defined as `~=1.17<1.18` which means that in order to be fully compliant with NEP 29, AiiDA will need to add support for later versions of NumPy by then.
+†) The current support of NumPy in `aiida-core` is defined as `~=1.17<1.18` which means that in order to be fully compliant with NEP 29, AiiDA will need to add support for later versions of NumPy by then.
 
 ‡) The support for Python 3.6 was [previously announced](http://www.aiida.net/download/) to last until 2021-12-23.
 
@@ -40,10 +40,10 @@ The adjusted support schedule reflects that dropping support for Python 3.5 on a
 
 ### Pros
 
- * The adoption of NEP 29 will harmonize AiiDA's deprecation policy with other major libraries within the Scientific Python ecosystem. As NEP 29 becomes more and more adopted, users will have an expectation of this level of support from AiiDA.
+ * The adoption of NEP 29 will harmonize AiiDA's deprecation policy with other major libraries within the Scientific Python ecosystem. As NEP 29 becomes adopted more broadly, users will have an expectation of the same level of support from AiiDA.
  * The adoption of NEP 29 will reduce the supported range of Python (minor) versions, which will simplify dependency management and testing.
  * The adoption of NEP 29 will remove the need for AiiDA maintainers to maintain their own (custom) support and deprecation schedule.
 
 ### Cons
 
- * The adoption of NEP 29 will slightly reduce the supported range of Python (minor) versions, which might be problematic for users who rely on older Python versions; however it is important to note that other major libraries, such as NumPy, that are likely required in the same context, will also have likely dropped support for these particular versions.
+ * The adoption of NEP 29 will slightly reduce the supported range of Python (minor) versions, which might be problematic for users who rely on older Python versions. However, it is important to note that other major libraries, such as NumPy, that are likely required in the same context, will also have likely dropped support for these particular versions.
