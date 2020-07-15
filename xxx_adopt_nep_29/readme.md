@@ -4,7 +4,7 @@
 |------------|--------------------------------------------------------------|
 | Title      | Adopt NEP 29                                                 |
 | Authors    | [Carl Simon Adorf](mailto:simon.adorf@epfl.ch) (csadorf)     |
-| Champions  | TBD                                                          | 
+| Champions  | [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)    |
 | Type       | P - Process                                                  |
 | Created    | 14-Jul-2020                                                  |
 | Status     | submitted                                                    |
