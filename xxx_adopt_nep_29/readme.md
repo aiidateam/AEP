@@ -29,4 +29,4 @@ This AEP proposed that the AiiDA ecosystem adopts the deprecation policy outline
 
 ### Cons
 
- * The adoption of NEP 29 will slightly reduce the supported range of Python (minor) verisons, which might be problematic for users who rely on older Python versions; however it is important to note that other major libraries, such as NumPy, that will likely be required in the same context, will also have dropped support for these particular versions.
+ * The adoption of NEP 29 will slightly reduce the supported range of Python (minor) versions, which might be problematic for users who rely on older Python versions; however it is important to note that other major libraries, such as NumPy, that are likely required in the same context, will also have likely dropped support for these particular versions.
