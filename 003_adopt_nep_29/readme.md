@@ -1,6 +1,6 @@
 # AiiDA Enhancement Proposal (AEP) Guidelines
 
-| AEP number | XXX                                                          |
+| AEP number | 003                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | Adopt NEP 29                                                 |
 | Authors    | [Carl Simon Adorf](mailto:simon.adorf@epfl.ch) (csadorf)     |
