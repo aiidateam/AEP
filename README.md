@@ -15,7 +15,7 @@ ecosystem and to document the decision making process.
 | Number | Status           | Title                                                            |
 |--------|------------------|------------------------------------------------------------------|
 | 000    | active           | [AEP guidelines](000_aep_guidelines/readme.md)                   | 
-| 001    | active           | [Drop support for Python 2.7](001_drop_python2/)                 |
+| 001    | implemented      | [Drop support for Python 2.7](001_drop_python2/)                 |
 | 002    | active           | [AiiDA Dependency Management](002_dependency_management/)        |
 
 ## Submitting an AEP
