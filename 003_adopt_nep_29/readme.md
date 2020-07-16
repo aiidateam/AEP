@@ -13,7 +13,7 @@
 
 The `aiida-core` package is classified as a hybrid between a library and application, and dependencies are kept as flexible as possible to allow the installation of the package within various Python software environments in combination with other libraries and applications, see [AEP 2](https://github.com/aiidateam/AEP/blob/master/002_dependency_management/readme.md) for details.
 
-The [NumPy project](https://numpy.org/) has accepted the [Numpy Enhancement Proposal 29](https://numpy.org/neps/nep-0029-deprecation_policy.html) (NEP), which recommends that *all projects within the scientific Python ecosystem* adopt a common deprecation policy with respect to the range of minimally supported Python and Numpy versions.
+The [NumPy project](https://numpy.org/) has accepted the [Numpy Enhancement Proposal 29](https://numpy.org/neps/nep-0029-deprecation_policy.html) (NEP 29), which recommends that *all projects within the scientific Python ecosystem* adopt a common deprecation policy with respect to the range of minimally supported Python and NumPy versions.
 
 ## Proposed Enhancement 
 
