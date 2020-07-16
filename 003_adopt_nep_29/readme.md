@@ -1,4 +1,4 @@
-# AiiDA Enhancement Proposal (AEP) Guidelines
+# Adopt NEP 29
 
 | AEP number | 003                                                          |
 |------------|--------------------------------------------------------------|
