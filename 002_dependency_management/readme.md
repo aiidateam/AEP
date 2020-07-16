@@ -7,7 +7,7 @@
 | Champions  | [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)    |
 | Type       | P - Process                                                  |
 | Created    | 18-Nov-2019                                                  |
-| Status     | active                                                       |
+| Status     | implemented                                                  |
 
 ## Scope
 

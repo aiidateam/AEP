@@ -16,7 +16,7 @@ ecosystem and to document the decision making process.
 |--------|------------------|------------------------------------------------------------------|
 | 000    | active           | [AEP guidelines](000_aep_guidelines/readme.md)                   | 
 | 001    | active           | [Drop support for Python 2.7](001_drop_python2/)                 |
-| 002    | active           | [AiiDA Dependency Management](002_dependency_management/)        |
+| 002    | implemented      | [AiiDA Dependency Management](002_dependency_management/)        |
 
 ## Submitting an AEP
 The submission process is described in the [AEP guidelines](000_aep_guidelines/readme.md) which also act as a template for new AEPs. 
