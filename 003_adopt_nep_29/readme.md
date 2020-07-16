@@ -17,11 +17,12 @@ The [NumPy project](https://numpy.org/) has accepted the [Numpy Enhancement Prop
 
 ## Proposed Enhancement 
 
-This AEP proposed that the AiiDA ecosystem adopts the deprecation policy outlined in NEP 29.
+This AEP proposes that `aiida-core` adopts the Python and NumPy version support schedule and deprecation policy outlined in NEP 29.
+It is strongly recommended that other packages within the AiiDA ecosystem, e.g. plugins, adopt the same policy.
 
 ## Detailed Explanation
 
-After this AEP is accepted, AiiDA will effectively adopt NEP 29 on **2021-01-13** and enter a transition period with a slightly adjusted support schedule until then:
+After this AEP is accepted, `aiida-core` will effectively adopt the policies outlined in NEP 29 on **2021-01-13** and enter a transition period with a slightly adjusted support schedule until then:
 
 | Date           | Python | NumPy | NEP 29 compliant | adjusted
 -----------------|--------|-------|------------------|---------
