@@ -29,20 +29,20 @@ to iterate over some custom parameters.
 
 Following the footsteps of the `BaseRestartWorkChain`, we implemented the `BaseIteratorWorkChain` as an abstract class. However sub classes
 just need to define the attribute `_process_class` in order to have a working iterator.
-This is sufficent to have an iterator that knows how to iterate over the input-ports of `_process_class`, however it can be extended to
+This is sufficient to have an iterator that knows how to iterate over the input-ports of `_process_class`, however it can be extended to
 iterate over other parameters making use of the attribute `_params_lookup` (see "Supplementary features" section for info).
 By default, `BaseIteratorWorkChain` exposes all the inputs of `_process_class` without namespace. The attribute `_expose_inputs_kwargs` can
 be used to pass arguments to the `spec.expose_inputs`, allowing the use of namespaces, the exclusion of some ports and so on.
 
 ### API design
 
-Once a `MyIterator(BaseIteratorWorkChain)` has been defined (specifing the attributes explained above), its use is very simple. We already said that
+Once a `MyIterator(BaseIteratorWorkChain)` has been defined (specifying the attributes explained above), its use is very simple. We already said that
 it exposes the inputs of `_process_class`, moreover three additional inputs are accepts.
 1. `iterate_over`. It is a dictionary ("key", "value")
     where "key" is the name of a parameter we want to iterate over (`str`) and "value" is a `list` with all
     the values to iterate over for the corresponding key. 
     NOTE_1: if "key" is an input port of `_process_class`, we allow "value" to be a list of aiida data types accepted by the "key"; 
-    in fact a serializer is applied internally to transorm the values of the list in the corresponding pk. 
+    in fact a serializer is applied internally to transform the values of the list in the corresponding pk. 
     NOTE_2: the `iterate_over` is a dictionary because it is
     possible to iterate over several keywords at the same time. The way the algorithm deals with these
     multiple iterations is decided by the `iterate_mode` input.
@@ -55,13 +55,13 @@ it exposes the inputs of `_process_class`, moreover three additional inputs are 
     
 ### Supplementary features
 
-We list here detailed description of additional fetures that we implemented. They are extentions to the basic idea of iterating over the
+We list here detailed description of additional features that we implemented. They are extensions to the basic idea of iterating over the
 input-ports of `_process_class`.
 
 #### The `_params_lookup`
 We mentioned that the attribute `_params_lookup` is used to make the workchain aware of additional parameters
-we want to allow. In the current implementation, this are its requirement.
-It should be a list of dictionaries where each dictionary should have the following keys:
+we want to allow. In the current implementation,
+it should be a list of dictionaries where each dictionary should have the following keys:
 1. group_name: str, optional
           The name of the group of parameters. Currently not used, but it will probably be used
           to show help messages.
@@ -95,12 +95,13 @@ check the following groups.
 
 IMPORTANT_NOTE_2: In the current implementation, for each parameter in `_params_lookup`, the allowed values
 (that will be passed by users in the list of `iterate_over`) are tight to the definition of the `parse_func`,
-but, in any case, they will be tranformed internally in aiida data nodes. This means that:
+but, in any case, they will be transformed internally in aiida data nodes. This means that:
 `iterate_over = {Ecut : [100,200]}` will produce during serialization a node Int(100) and Int(200) and store 
 the corresponding pk. This allows maximum flexibility to pass any storable object, but has the downside to
 create several nodes.
 
-Example SiestaIterator
+Example of the use of `_params_lookup` is the [SiestaIterator](https://github.com/albgar/aiida_siesta_plugin/blob/develop/aiida_siesta/workflows/iterate.py)
+
 
 #### The method `iteration_input`
 
@@ -113,10 +114,10 @@ to submit calculations is the parameter one wants to iterate over. However, it i
 too important to the workchain to hide under `iterate_over`. In fact, without having values
 for this parameter, the workchain does not make sense. By using an iteration input, you can create
 an input port `scales` that will host the values to iterate over. Moreover, with this approach, one can
-provide a default and make the parameter required.
+provide a default and make the parameter required or not.
 The method `iteration_input` creates a regular aiida input, so one should use this function as if using `spec.input`.
 The only difference is that the workchain is then aware that it needs to serialize the list of values
-provided here and incorporate it into `iterate_over`.
+provided here and incorporate it into the internal list of object to iterate over.
 Apart from all the parameters that `spec.input` accepts, this function accepts two more parameters:
 1. input_key: `str`, optional.
             The name of the input were the values for this parameter will end up
@@ -130,19 +131,19 @@ If you don't provide an `input_key`, the iterator will try to look for the param
 In many case, the use of `iteration_input` makes the use of `iterate_over` unnecessary. 
 The attribute `_iterate_over_port` can be set to false in order to make the port `iterate_over` not required.
 
-Example
+Example of the use of `iteration_input` is [the eos workchain in aiida-sesta](https://github.com/albgar/aiida_siesta_plugin/blob/c296533195ceacc983f050adb59a8d57cb0337ae/aiida_siesta/workflows/eos.py#L233)
 
 #### Flexibility of rewriting methods.
 
-The modular structure of the workchain implementation allows expert users to redefine methods at will. This can be really usefull in many
+The modular structure of the workchain implementation allows expert users to redefine methods at will. This can be really useful in many
 cases. Two examples:
 
 1. Some methods of `BaseIteratorWorkChain` can be overridden in order to insert analysis of the results of each iteration and even
    introduce some logic that checks weather to keep iterating or not. On this line we see, for instance, the possibility to use
-   the `BaseIteratorWorkChain` as core piece to create convergers. Example SiestaConverger
+   the `BaseIteratorWorkChain` as core piece to create convergers. An example is the [BaseConverger in aiida-siesta](https://github.com/albgar/aiida_siesta_plugin/blob/develop/aiida_siesta/workflows/utils/converge_absclass.py)
 
 2. The serialization of the port `iterate_over` is done in independent methods of `BaseIteratorWorkChain`. The change of these
-   methods allows to easly change the current API if needed.
+   methods allows to easily change the current API if needed.
 
 
 #### Reuse of inputs
@@ -150,13 +151,13 @@ cases. Two examples:
 The final attribute that can be selected in the `BaseIteratorWorkChain` is the `_reuse_inputs` attribute. Set to False as a default,
 it can be set to True when some created parameters should be reused by the next step instead of always
 grabbing the initial user inputs. This attribute assumes meaning only when an analysis of the results that saves new inputs parameters in
-`self.ctx.last_inputs` is implemented. A nice use case is the SequentialConverger (), that is a `BaseIteratorWorkChain` having a 
-converger as a `_process_class`!
+`self.ctx.last_inputs` is implemented. A nice use case is the sequential converger, that is a `BaseIteratorWorkChain` having a 
+converger as a `_process_class`! Example [here](https://github.com/albgar/aiida_siesta_plugin/blob/c296533195ceacc983f050adb59a8d57cb0337ae/aiida_siesta/workflows/utils/converge_absclass.py#L158)
 
 ## Important final remarks
 
-The described implementation of the `BaseIteratorWorkChain` is alrady distributed in the aiida-siesta package. A copy of the class code is
+The described implementation of the `BaseIteratorWorkChain` is already distributed in the aiida-siesta package. A copy of the class code is
 also cloned in this folder to welcome here suggestions on how to improve the implementation.
-Some methods of `BaseIteratorWorkChain` are very similar in scope to methods of `BaseRestartWorkChain`. Even though we see the similarity of
-some functionality of the two workchains we preferred to keep this implementation completly independent by the `BaseRestartWorkChain`. We can discuss
+Some methods of `BaseIteratorWorkChain` are very similar in scope to methods of `BaseRestartWorkChain`. Even though we see similarities
+of the two workchains, we preferred to keep this implementation completely independent from the `BaseRestartWorkChain`. We can discuss
 the interplay between the two classes.
