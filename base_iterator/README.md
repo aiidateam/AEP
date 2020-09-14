@@ -37,7 +37,7 @@ be used to pass arguments to the `spec.expose_inputs`, allowing the use of names
 ### API design
 
 Once a `MyIterator(BaseIteratorWorkChain)` has been defined (specifying the attributes explained above), its use is very simple. We already said that
-it exposes the inputs of `_process_class`, moreover three additional inputs are accepts.
+it exposes the inputs of `_process_class`, moreover three additional inputs are acceped.
 1. `iterate_over`. It is a dictionary ("key", "value")
     where "key" is the name of a parameter we want to iterate over (`str`) and "value" is a `list` with all
     the values to iterate over for the corresponding key. 
@@ -62,29 +62,30 @@ input-ports of `_process_class`.
 We mentioned that the attribute `_params_lookup` is used to make the workchain aware of additional parameters
 we want to allow. In the current implementation,
 it should be a list of dictionaries where each dictionary should have the following keys:
-1. group_name: str, optional
+1. group_name: `str`, optional.
           The name of the group of parameters. Currently not used, but it will probably be used
           to show help messages.
-2. input_key: str
-          The input of the `_process_class` where the parsed values will end up.
-3. parse_func: function
-            The function that will be used to parse the values for the parameters. The first arguments
-            of this function should be the value to parse (as an aiida node) and the full inputs
-            AttributeDict that is going to be passed to the process class. Also it should accept the `input_key` and
+2. input_key: `str`.
+          The input of the `_process_class` where the parsed values for this group of parameters will end up.
+3. parse_func: `function`.
+            The function that transorms the input with name `input_key` (input of `_process_class`) 
+            according to the parsed values for the parameters. The first arguments
+            of this function should be the value parsed (in form of an aiida data type). The second argument the full inputs
+            AttributeDict that is going to be passed to the `_process_class`. The function should also accept the `input_key` and
             `parameter` keyword arguments, which provides the input_key where the parsed value will go
-            and the name of the parameter that the function is parsing. Finally, it needs to accept all kwargs
-            that you define in the `keys` key (see below).
-            It should not modify the inputs AttributeDict in place, but return the parsed value.
-            E.g.:
-            def parse_myparameters(val, inputs, parameter, input_key, **kwargs):
-                ...do your parsing
-                return parsed_value
-4.  condition: function, optional
+            and the parameter name. Finally, it needs to accept all kwargs that you define in the `keys` key (see below).
+            It should not modify the inputs AttributeDict in place, but return a modified data type accepted by `input_key` port.
+            
+                def parse_myparameters(val, inputs, parameter, input_key, **kwargs):
+                    ...do your parsing of val and create a Data accepted by input_key port
+                    return new_Data_accepted_by_input_key_port
+                     
+4.  condition: `function`, optional.
             A function that receives the name of the parameter and decides whether it belongs to this group.
             The function should return either `True`, or `False`.
             It will only be used if the key is not explicitly defined in the `keys` key (see below).
             If not provided, it will always return `False`
-5.  keys: dict, optional
+5.  keys: `dict`, optional.
             A dictionary where each key is a parameter that can be accepted and each value is either
             a dict containing the kwargs that will be passed to `parse_func` or None (same as empty dict).
             Even when a parameter is not defined here, it will be accepted if it fulfills `condition`.
@@ -161,3 +162,4 @@ also cloned in this folder to welcome here suggestions on how to improve the imp
 Some methods of `BaseIteratorWorkChain` are very similar in scope to methods of `BaseRestartWorkChain`. Even though we see similarities
 of the two workchains, we preferred to keep this implementation completely independent from the `BaseRestartWorkChain`. We can discuss
 the interplay between the two classes.
+We did not discussed yet (not even informally) with a member of the AiiDA team. If you could assign a champion to us would be great.
