@@ -44,18 +44,17 @@ We propose to introduce a set of requirements for a new archive format, followed
 
 As an AiiDA user I want to be able to import/export databases regardless of whether the size of the database is larger than my memory.
 
-* Exporting/importing an archive should not at any point require more free disk space than 2x the size of the uncompressed AiiDA data
-   * i.e., the import shouldn’t create too many temporary copies in the import process
+* Exporting/importing an archive should not at any point require more free disk space than 2x the size of the uncompressed AiiDA data, i.e., the import shouldn’t create too many temporary copies in the import process
 * E.g. a repository without files and 16GB of attributes/extras: export & import should work with memory of, say, 1-2 GB
 * How to accomplish this?  Import all nodes, then import all links (all in a transaction), then do checks?
-* Seb: Currently these checks are done one the frontend level; perhaps it would be faster to do this at the database level
+* Seb: Currently these checks are done on the frontend level; perhaps it would be faster to do this at the database level
 
 #### UX Performance
 
 As an AiiDA user, I want to be able to import/export 6M nodes in less than 6h, at least in ‘exclusive’ mode.[a]
 
- * Note on the exclusive mode: it is going to be possible to achieve this target if we import directly to the pack files. However, it might not be too safe to do it while AiiDA is being used. But I think this is OK: if you really have a huge import to do, most probably it’s the first thing you do after creating a profile (so before starting the daemon or a verdi shell), or it’s OK to stop working for some hours if you get orders of magnitude speedup.
- * There should still be a ‘default’ mode that imports as loose objects and is safe to use for normal use. HOWEVER, this should WARN the user if there are too many objects (threshold to be decided/tested, e.g. 10’000 or 100’000 objects?), saying that it’s better to stop the daemon, import quickly, and then restart using the daemon.[b]
+* Note on the exclusive mode: it is going to be possible to achieve this target if we import directly to the pack files. However, it might not be too safe to do it while AiiDA is being used. But I think this is OK: if you really have a huge import to do, most probably it’s the first thing you do after creating a profile (so before starting the daemon or a verdi shell), or it’s OK to stop working for some hours if you get orders of magnitude speedup.
+* There should still be a ‘default’ mode that imports as loose objects and is safe to use for normal use. HOWEVER, this should WARN the user if there are too many objects (threshold to be decided/tested, e.g. 10’000 or 100’000 objects?), saying that it’s better to stop the daemon, import quickly, and then restart using the daemon.[b]
 
 #### Archive size
 
