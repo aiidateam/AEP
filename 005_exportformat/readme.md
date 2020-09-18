@@ -1,5 +1,14 @@
 # New Export Format
 
+| AEP number | 005                                                              |
+|------------|------------------------------------------------------------------|
+| Title      | Implement a new archive export format                            |
+| Authors    | [Chris Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell) |
+| Champions  | [Chris Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell) |
+| Type       | S - Standard                                                     |
+| Created    | 18-Sept-2020                                                     |
+| Status     | submitted                                                        |
+
 ## Hard requirements
 
 * Memory usage As an AiiDA user I want to be able to import/export databases regardless of whether the size of the database is larger than my memory.
