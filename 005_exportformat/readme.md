@@ -28,7 +28,7 @@ such that:
 
 * `metadata.json` contains the aiida version, export version and other global data.
 * `data.json` contains all requisite information from the SQL Database.
-* `nodes` contains the "objectstore" files per node, organised by UUID: `xxyy-zz...`.
+* `nodes` contains the "object store" files per node, organised by UUID: `xxyy-zz...`.
 
 Particularly for large export archives, writing to (export) and reading from (import) `data.json` represents a significant bottle-neck in performance for these processes.
 
@@ -55,6 +55,10 @@ As an AiiDA user, I want to be able to import/export 6M nodes in less than 6h, a
 
 * Note on the exclusive mode: it is going to be possible to achieve this target if we import directly to the pack files. However, it might not be too safe to do it while AiiDA is being used. But I think this is OK: if you really have a huge import to do, most probably it’s the first thing you do after creating a profile (so before starting the daemon or a verdi shell), or it’s OK to stop working for some hours if you get orders of magnitude speedup.
 * There should still be a ‘default’ mode that imports as loose objects and is safe to use for normal use. HOWEVER, this should WARN the user if there are too many objects (threshold to be decided/tested, e.g. 10’000 or 100’000 objects?), saying that it’s better to stop the daemon, import quickly, and then restart using the daemon.[b]
+
+[a] I know we can never have these requirements very precise and they will always be a vague estimate, but won't this also rely a lot on the machine being used. Is this target of 1M nodes/hour for a standard laptop, a workstation or a dedicated AiiDA server?
+
+[b] For this requirement, it then becomes crucial that we can really introspect an archive very fast to get a rough sense of the size of the contents. Ideally by scanning on the file, but if this is too slow, we might need to create some "index" file with some stats that our commands typically use. This also goes back to the `verdi export inspect` command and making that as efficient as possible.
 
 #### Archive size
 
@@ -105,7 +109,7 @@ Gio: We could store node-level jsons in disk object store + a list of uuid<>hash
 Leo: If you're already making your export file a database (object store sqlite), why spend so much thought on how to serialize the data from postgres rather than just dumping it into the sqlite database as well?[m][n]
 Leo: Here another interesting resource on possible data formats (e.g. avro) https://www.oreilly.com/library/view/google-bigquery-the/9781492044451/ch04.html#loading_data_efficiently
    * pro avro: [o]
-pre-defined (JSON) schemas => no per-record overhead; 
+pre-defined (JSON) schemas => no per-record overhead;
 binary => smaller file size, faster reading
 RPC support => can be used a bit like a database
    * pro json lines: human-readable; simple
@@ -122,10 +126,6 @@ Casper: A regular zip file has intelligent indexing, if I remember correctly, ma
 * Hybrid version: create JSON files, but store them in the object store. Just keep a minimal JSON index (e.g. a mapping uuid -> hashkey) - could also be stored in multiline json, even if in many cases one might have to load it all in memory.
 
 ## Comments
-
-[a] I know we can never have these requirements very precise and they will always be a vague estimate, but won't this also rely a lot on the machine being used. Is this target of 1Mnodes/hour for a standard laptop, a workstation or a dedicated AiiDA server?
-
-[b] For this requirement, it then becomes crucial that we can really introspect an archive very fast to get a rough sense of the size of the contents. Ideally by scanning on the file, but if this is too slow, we might need to create some "index" file with some stats that our commands typically use. This also goes back to the `verdi export inspect` command and making that as efficient as possible.
 
 [c] Agreed on all three points. However, your confusion (in a private email) that we shouldn't use SQLite does not hold. Indeed, looking at your points: (a) SQLite is in the standard python library, no dependencies required (I use SQLAlchemy because I'm lazy, but I could drop it in disk-objectstore and have 0 dependencies).
 (b) SQLite is a very stable and robust format. They have a dedicated page: https://www.sqlite.org/lts.html, intend to support the format at least until 2050, and SQLite is  the recommended by the US Library Of Congress for the preservation of digital content.
