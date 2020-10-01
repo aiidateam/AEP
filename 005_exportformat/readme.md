@@ -64,7 +64,7 @@ An initial target though would be approximately one million nodes per hour on a 
 The user may run these processes in one of two modes, which may affect the process performance:
 
 * Default mode, can be run whilst the database is being used, i.e. there is one or more daemon running.
-* Exclusive mode, requires that the database is not in use.
+* Exclusive mode, requires that the database and file repository are not in use.
 
 In exclusive mode it would be possible to import directly to the new object-store pack files, whereas in default mode the objects would be required to be imported as loose objects.
 
