@@ -30,7 +30,13 @@ such that:
 * `data.json` contains all requisite information from the SQL Database.
 * `nodes` contains the "object store" files per node, organised by UUID: `xxyy-zz...`.
 
-Particularly for large export archives, writing to (export) and reading from (import) `data.json` represents a significant bottle-neck in performance for these processes, both in respect to memory usage and process speed.
+This format has two principle shortcomings:
+
+1. The file repository is inefficiently stored. 
+   Each file is written as a singular, uncompressed file, which requires a large number of [inode](https://en.wikipedia.org/wiki/Inode) metadata objects and leads large bottlenecks content indexing.
+2. For the validity of `data.json` to be determined, the entire content has to be read into memory, which becomes a limiting factor for export size.
+
+Particularly for large export archives (many millions of nodes), writing to (export) and reading from (import) `data.json` represents a significant bottle-neck in performance for these processes, both in respect to memory usage and process speed.
 
 ## Proposed Enhancement
 
