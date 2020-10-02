@@ -4,7 +4,7 @@
 |------------|------------------------------------------------------------------|
 | Title      | Implement a new archive export format                            |
 | Authors    | [Chris Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell) |
-| Champions  | [Chris Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell) |
+| Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi) |
 | Type       | S - Standard                                                     |
 | Created    | 18-Sept-2020                                                     |
 | Status     | submitted                                                        |
@@ -50,7 +50,8 @@ The following is a list of the key user requirements that a new export format mu
 
 4. Data Integrity: As an AiiDA user I do not want imports to lead to inconsistencies in my AiiDA database.
 
-5. Data Accessibility: As an AiiDA user, I expect to be able to inspect and reuse the data I export today for at least 10 years into the future (ideally longer).
+5. Data Longevitiy: As an AiiDA user, I expect to be able to inspect and reuse the data I export today for at least 10 years into the future (ideally longer).
+6. Data introspectability: As an AiiDA user, I expect to be able to obtain rough statistics about the archive, such as the total number of nodes, almost instantaneously.
 
 ### Design requirements
 
@@ -79,7 +80,7 @@ For example, a repository without files and 16GB of attributes/extras: export & 
 To ensure the data integrity of the final archive or imported database, the interaction with the SQL database should desirably be processed during a single transaction, which can be rolled back in case of import failures.
 Similarly for the object-store, failed imports should not leave large occupied portions of disk space, which can not be reclaimed.
 
-#### Archive Accessibility
+#### Archive Longevity and Accessibility
 
 To mitigate the risk of archives becoming inaccessible, due to future technology deprecations, the following considerations should be made when selecting the archive format:
 
@@ -91,7 +92,8 @@ The archive format and tools should also provide a standalone means (outside of 
 * the number of database objects, by category (nodes, users, computers, groups, etc)
 * the UUID set contained in the archive
 * the number of object-store objects and potentially a set of object hash keys
-* Extract subsets/single nodes
+
+These operation should be very fast and should not be significantly affected by archive size; degrding in peformance at either O(1) or O(log N) complexity, for N nodes.
 
 It should also be considered how the archive format relates to the internal AiiDA schema, which will likely change over time, with complex schema migrations.
 Ideally the archive format should be independent of this schema, with a well-defined and versioned schema that changes very infrequently.
