@@ -32,7 +32,7 @@ such that:
 
 This format has two principle shortcomings:
 
-1. The file repository is inefficiently stored. 
+1. The file repository is inefficiently stored.
    Each file is written as a singular, uncompressed file, which requires a large number of [inode](https://en.wikipedia.org/wiki/Inode) metadata objects and leads large bottlenecks content indexing.
 2. For the validity of `data.json` to be determined, the entire content has to be read into memory, which becomes a limiting factor for export size.
 
@@ -40,7 +40,9 @@ Particularly for large export archives (many millions of nodes), writing to (exp
 
 ## Proposed Enhancement
 
-The goal of this project is to first develop a set of agreed requirements for a new archive format, followed by a concrete implementation of the format, and accompanying export and import functions.
+The goal of this enhancement is to replace the current archive format with one that allows for reading and writing of large archives, without significant degradation in performance.
+
+The proposal first outlines a set of agreed requirements for a new archive format, followed by proposals for a concrete implementation of the format, and accompanying export and import functions.
 
 ## Detailed Explanation
 
@@ -57,7 +59,8 @@ The following is a list of the key user requirements that a new export format mu
 4. Data Integrity: As an AiiDA user I do not want imports to lead to inconsistencies in my AiiDA database.
 
 5. Data Longevitiy: As an AiiDA user, I expect to be able to inspect and reuse the data I export today for at least 10 years into the future (ideally longer).
-6. Data introspectability: As an AiiDA user, I expect to be able to obtain rough statistics about the archive, such as the total number of nodes, almost instantaneously.
+
+6. Data Introspectability: As an AiiDA user, I expect to be able to obtain rough statistics about the archive, such as the total number of nodes, almost instantaneously.
 
 ### Design requirements
 
@@ -80,11 +83,21 @@ This process reporting should aim to be accurate to within a factor of approxima
 The introspections scan(s) should take an insignificant amount of time, relative to the actual import/export, and so may necessitate that the archive has a central index, from which to query statistics (see below).
 This introspection could also provide a warning when the default mode is preferable over the exclusive mode, based on a threshold object limit.
 
-Exporting/importing an archive should not at any point require more free disk space than 2x the size of the uncompressed AiiDA data, i.e., the import shouldn’t create too many temporary copies in the import process. 
+Exporting/importing an archive should not at any point require more free disk space than 2x the size of the uncompressed AiiDA data, i.e., the import shouldn’t create too many temporary copies in the import process.
 For example, a repository without files and 16GB of attributes/extras: export & import should not require more than approximately 1-2GB of memory.
 
 To ensure the data integrity of the final archive or imported database, the interaction with the SQL database should desirably be processed during a single transaction, which can be rolled back in case of import failures.
 Similarly for the object-store, failed imports should not leave large occupied portions of disk space, which can not be reclaimed.
+
+#### Single File Archive
+
+For portability and space management, it is a requirements that the archive be a single zipped file.
+This compression should be intrinsic to the format specification, such that read, write and data introspection processes act on and are benchmarked against the zipped archive.
+
+Currently the archive is allowed to be compressed *via* a number of different algorithms (zip, tar.gz).
+For data longevity though, it is desirable that only a single compression algorithm should be enforced.
+
+This zip format should also desirably allow for content inspection without fully unzipping the file.
 
 #### Archive Longevity and Accessibility
 
@@ -104,10 +117,13 @@ These operation should be very fast and should not be significantly affected by 
 It should also be considered how the archive format relates to the internal AiiDA schema, which will likely change over time, with complex schema migrations.
 Ideally the archive format should be independent of this schema, with a well-defined and versioned schema that changes very infrequently.
 
-#### Additional Features
+### Minimal Feature Set
 
-An additional feature to consider would be delta increments, such that an existing archive file could be amended during an export.
-This may allow for a push/pull interface for "syncing" an archive file to a particular AiiDA profile.
+Given the above design requirements, the table below defines a minimal feature set, and compares this to the current implementation.
+
+| Feature                       | Current |
+| ----------------------------- | ------- |
+|                               |         |
 
 ### Proposals
 
@@ -127,7 +143,8 @@ At a node level, dumping data into a JSON and writing to disk, would also likely
 When writing an export file, these issues should not necessarily be present.
 
 [JSON streaming](https://en.wikipedia.org/wiki/JSON_streaming) technologies, such as JSONL, also allow for JSON to be streamed, without the need to read the full file into memory.
-It is unclear though if this would actually provide any performance gains, since in many cases the full JSON will still need to be loaded into memory.
+This would overcome the current limitation in memory usage, that the full JSON must be read into memory,
+but it is unclear yet as to how performant this would be.
 
 #### SQLite database
 
@@ -163,15 +180,6 @@ As with the JSON database, this format is highly accessible and stable, but not 
 
 The alternative approach would be to use the newly implemented "packfile" object-store, in combination with a  SQLite database that contains the index.
 The pros and cons of this approach have been previously assessed in <https://github.com/aiidateam/AEP/pull/11>.
-
-### Archive compression
-
-For portability, it is desirable that the full archive be contained within a single zipped file.
-
-Currently the archive is allowed to be compressed *via* a number of different algorithms (zip, tar.gz).
-For data longevity though, it is desirable that only a single compression algorithm should be enforced.
-
-This zip format should also desirably allow for content inspection without fully unzipping the file.
 
 ## Pros and Cons
 
