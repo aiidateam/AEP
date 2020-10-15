@@ -30,10 +30,10 @@ such that:
 * `data.json` contains all requisite information from the SQL Database.
 * `nodes` contains the "object store" files per node, organised by UUID: `xxyy-zz...`.
 
-This format has two principle shortcomings:
+This format has two principal shortcomings:
 
 1. The file repository is inefficiently stored.
-   Each file is written as a singular, uncompressed file, which requires a large number of [inode](https://en.wikipedia.org/wiki/Inode) metadata objects and leads large bottlenecks content indexing.
+   Each file is written as a single, uncompressed file, which requires a large number of [inode](https://en.wikipedia.org/wiki/Inode) metadata objects and leads large bottlenecks content indexing.
 2. For the validity of `data.json` to be determined, the entire content has to be read into memory, which becomes a limiting factor for export size.
 
 Particularly for large export archives (many millions of nodes), writing to (export) and reading from (import) `data.json` represents a significant bottle-neck in performance for these processes, both in respect to memory usage and process speed.
@@ -58,7 +58,7 @@ The following is a list of the key user requirements that a new export format mu
 
 4. Data Integrity: As an AiiDA user I do not want imports to lead to inconsistencies in my AiiDA database.
 
-5. Data Longevitiy: As an AiiDA user, I expect to be able to inspect and reuse the data I export today for at least 10 years into the future (ideally longer).
+5. Data Longevity: As an AiiDA user, I expect to be able to inspect and reuse the data I export today for at least 10 years into the future (ideally longer).
 
 6. Data Introspectability: As an AiiDA user, I expect to be able to obtain rough statistics about the archive, such as the total number of nodes, almost instantaneously.
 
@@ -73,10 +73,10 @@ An initial target though would be approximately one million nodes per hour on a 
 
 The user may run these processes in one of two modes, which may affect the process performance:
 
-* Default mode, can be run whilst the database is being used, i.e. there is one or more daemon running.
+* Default mode, can be run whilst the database is being used, i.e. there is one or more daemon running, and/or one or more verdi shells running or python scripts being executed via `verdi run`.
 * Exclusive mode, requires that the database and file repository are not in use.
 
-In exclusive mode it would be possible to import directly to the new object-store pack files, whereas in default mode the objects would be required to be imported as loose objects.
+In exclusive mode it would be possible to import directly to the new object-store pack files (that has a significant performance boost when importing data involving hundreds of thousands of files in the AiiDA repository or more), whereas in default mode the objects would be required to be imported as loose objects (which is always safe to do even during concurrent access to the repository).
 
 It would also be highly desirable to be able to introspect an archive before import, to feedback an estimate of the process time to the user and provide dynamic progress reporting (e.g. a progress bar).
 This process reporting should aim to be accurate to within a factor of approximately 2-3.
@@ -87,11 +87,11 @@ Exporting/importing an archive should not at any point require more free disk sp
 For example, a repository without files and 16GB of attributes/extras: export & import should not require more than approximately 1-2GB of memory.
 
 To ensure the data integrity of the final archive or imported database, the interaction with the SQL database should desirably be processed during a single transaction, which can be rolled back in case of import failures.
-Similarly for the object-store, failed imports should not leave large occupied portions of disk space, which can not be reclaimed.
+Similarly for the object-store, failed imports should not leave large occupied portions of disk space which can not be reclaimed (or at least, if large occupied portions of disk space are left behind, there should be a clear message indicating to the user how to reclaim it, ideally in an efficient way).
 
 #### Single File Archive
 
-For portability and space management, it is a requirements that the archive be a single zipped file.
+For portability and space management, it is a requirements that the archive be a single (possibly zipped) file.
 This compression should be intrinsic to the format specification, such that read, write and data introspection processes act on and are benchmarked against the zipped archive.
 
 Currently the archive is allowed to be compressed *via* a number of different algorithms (zip, tar.gz).
@@ -112,7 +112,7 @@ The archive format and tools should also provide a standalone means (outside of 
 * the UUID set contained in the archive
 * the number of object-store objects and potentially a set of object hash keys
 
-These operation should be very fast and should not be significantly affected by archive size; degrding in peformance at either O(1) or O(log N) complexity, for N nodes.
+These operation should be very fast and should not be significantly affected by archive size, ideally scaling with O(1) or O(log N) complexity, for N nodes.
 
 It should also be considered how the archive format relates to the internal AiiDA schema, which will likely change over time, with complex schema migrations.
 Ideally the archive format should be independent of this schema, with a well-defined and versioned schema that changes very infrequently.
