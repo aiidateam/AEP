@@ -141,7 +141,7 @@ cases. Two examples:
 
 1. Some methods of `BaseIteratorWorkChain` can be overridden in order to insert analysis of the results of each iteration and even
    introduce some logic that checks weather to keep iterating or not. On this line we see, for instance, the possibility to use
-   the `BaseIteratorWorkChain` as core piece to create convergers. An example is the [BaseConverger in aiida-siesta](https://github.com/albgar/aiida_siesta_plugin/blob/develop/aiida_siesta/workflows/utils/converge_absclass.py)
+   the `BaseIteratorWorkChain` as core piece to create convergers. An example is the [BaseConverger in aiida-siesta](https://github.com/albgar/aiida_siesta_plugin/blob/develop/aiida_siesta/utils/converge_absclass.py)
 
 2. The serialization of the port `iterate_over` is done in independent methods of `BaseIteratorWorkChain`. The change of these
    methods allows to easily change the current API if needed.
