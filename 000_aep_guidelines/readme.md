@@ -7,7 +7,8 @@
 | Champions  | [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) (kjappelbaum), [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)|
 | Type       | P - Process                                                  |
 | Created    | 19-Mar-2019                                                  |
-| Status     | active                                                       |
+| Last modified | 01-Nov-2020                                               |
+| Status     | implemented                                                  |
 
 ## Background 
 The AiiDA ecosystem with its plugins is growing beyond the bounds of EPFL
@@ -40,10 +41,10 @@ A table containing:
     * `S - Standard Track AEP`: describes new features or changes to AiiDA
     * `I - Informational AEP`: describes design issues or best practice. A notable informational PEP is [the Zen of Python](https://www.python.org/dev/peps/pep-0020/)
     * `P - Process AEP`: describes changes to processes in the AiiDA ecoystem, such as a change to the decision making or development process (e.g. new standards for commit messages)
-  * creation date
+  * date of creation
+  * date of last modification
   * status: one of
-    * `submitted` - this should be the initial status when submitting the pull request to the AEP repository
-    * `active` - this AEP has been accepted and people are actively discussing and implementing it
+    * `draft` - this AEP has been accepted, and people are actively discussing and implementing it (further modifications may be necessary)
     * `implemented` - this AEP has been implemented
     * `postponed` - this AEP is no longer active, might be interesting for the project but has noone willing to champion it
     * `rejected` - this AEP has been rejected and will not be implemented

@@ -7,7 +7,8 @@
 | Champions  | [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz), [Sebastiaan Huber](mailto:sebastiaan.huber@epfl.ch) (sphuber) |
 | Type       | P - Process                                                  |
 | Created    | 14-Jul-2020                                                  |
-| Status     | active                                                       |
+| Last modified | 14-Jul-2020                                               |
+| Status     | implemented                                                  |
 
 ## Background 
 
