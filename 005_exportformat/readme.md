@@ -84,7 +84,8 @@ The introspections scan(s) should take an insignificant amount of time, relative
 This introspection could also provide a warning when the default mode is preferable over the exclusive mode, based on a threshold object limit.
 
 Exporting/importing an archive should not at any point require more free disk space than 2x the size of the uncompressed AiiDA data, i.e., the import shouldn’t create too many temporary copies in the import process.
-For example, a repository without files and 16GB of attributes/extras: export & import should not require more than approximately 1-2GB of memory.
+For example, a repository without files and 16GB of attributes/extras: export & import should not require more than approximately 32GB of free disk space.
+Additionaly, the export & import should not require the full archive to be read into memory at any point; both processes should peak at no more than ~2GB of used RAM, irrespective of the database or archive size.
 
 To ensure the data integrity of the final archive or imported database, the interaction with the SQL database should desirably be processed during a single transaction, which can be rolled back in case of import failures.
 Similarly for the object-store, failed imports should not leave large occupied portions of disk space which can not be reclaimed (or at least, if large occupied portions of disk space are left behind, there should be a clear message indicating to the user how to reclaim it, ideally in an efficient way).
@@ -116,14 +117,6 @@ These operation should be very fast and should not be significantly affected by 
 
 It should also be considered how the archive format relates to the internal AiiDA schema, which will likely change over time, with complex schema migrations.
 Ideally the archive format should be independent of this schema, with a well-defined and versioned schema that changes very infrequently.
-
-### Minimal Feature Set
-
-Given the above design requirements, the table below defines a minimal feature set, and compares this to the current implementation.
-
-| Feature                       | Current |
-| ----------------------------- | ------- |
-|                               |         |
 
 ### Proposals
 
