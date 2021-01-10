@@ -95,8 +95,8 @@ Similarly for the object-store, failed imports should not leave large occupied p
 For portability and space management, it is a requirements that the archive be a single (possibly zipped) file.
 This compression should be intrinsic to the format specification, such that read, write and data introspection processes act on and are benchmarked against the zipped archive.
 
-Currently the archive is allowed to be compressed *via* a number of different algorithms (zip, tar.gz).
-For data longevity though, it is desirable that only a single compression algorithm should be enforced.
+Currently the archive is allowed to be compressed *via* two standard compression algorithms (`zip` and `tar.gz`).
+For data longevity, only these standard, well supported compression algorithm should be utilised.
 
 This zip format should also desirably allow for content inspection without fully unzipping the file.
 
