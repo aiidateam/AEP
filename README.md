@@ -18,7 +18,7 @@ ecosystem and to document the decision making process.
 | 001    | implemented      | [Drop support for Python 2.7](001_drop_python2/)                 |
 | 002    | implemented      | [AiiDA Dependency Management](002_dependency_management/)        |
 | 003    | active           | [Adopt NEP 29](003_adopt_nep_29/)                                |
-| 005    | submitted        | [New Export Format](005_exportformat/)                           |
+| 005    | draft        | [New Export Format](005_exportformat/)                           |
 
 ## Submitting an AEP
 The submission process is described in the [AEP guidelines](000_aep_guidelines/readme.md) which also act as a template for new AEPs. 

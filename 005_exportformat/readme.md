@@ -7,7 +7,7 @@
 | Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi) |
 | Type       | S - Standard                                                     |
 | Created    | 18-Sept-2020                                                     |
-| Status     | submitted                                                        |
+| Status     | draft                                                        |
 
 ## Background
 
