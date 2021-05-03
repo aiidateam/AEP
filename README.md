@@ -10,7 +10,7 @@ The purpose is to publicly discuss new features & design choices in the AiiDA
 ecosystem and to document the decision making process.
 
 
-## Index of AEPs 
+## Index of AEPs
 
 | Number | Status           | Title                                                            |
 |--------|------------------|------------------------------------------------------------------|
@@ -19,6 +19,7 @@ ecosystem and to document the decision making process.
 | 002    | implemented      | [AiiDA Dependency Management](002_dependency_management/)        |
 | 003    | active           | [Adopt NEP 29](003_adopt_nep_29/)                                |
 | 005    | draft        | [New Export Format](005_exportformat/)                           |
+| 006    | draft            | [Extend REST API](006_entend_restapi/)                           |
 
 ## Submitting an AEP
-The submission process is described in the [AEP guidelines](000_aep_guidelines/readme.md) which also act as a template for new AEPs. 
+The submission process is described in the [AEP guidelines](000_aep_guidelines/readme.md) which also act as a template for new AEPs.
