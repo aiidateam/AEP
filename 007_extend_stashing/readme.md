@@ -1,6 +1,6 @@
 # Extending the stashing feature to new modes
 
-| AEP number | 006                                                          |
+| AEP number | 007                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | Extending the stashing feature to new modes                  |
 | Authors    | [Marnik Bercx](mailto:marnik.bercx@epfl.ch) (mbercx), [Francisco Ramirez](mailto:francisco.ramirez@epfl.ch) (ramirezfranciscof) |
