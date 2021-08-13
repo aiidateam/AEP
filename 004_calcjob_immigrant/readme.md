@@ -1,6 +1,6 @@
 # AiiDA Enhancement Proposal (AEP) Guidelines
 
-| AEP number | 003                                                          |
+| AEP number | 004                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | Infrastructure to immigrate completed calculation jobs       |
 | Authors    | [Sebastiaan P. Huber](mailto:mail@sphuber.net) (sphuber)     |
@@ -12,7 +12,7 @@
 ## Background
 When new users come to AiiDA, often they will already have completed many simulations without the use of AiiDA.
 Seamlessly integrating those into AiiDA, as if they *would* have been, such that they become directly interoperable and almost indistinguishable from any calculations that will be run with AiiDA in the future, is a feature that is often asked for.
-For many potential new users of AiiDA, the absence of this functionality will even be a deal breaker for adopting AiiDA as their new workflow management system.
+For new users of AiiDA, the absence of this functionality could even be a deal breaker for adopting AiiDA as their new workflow management system.
 
 ## Proposed Enhancement
 AiiDA core will provide a unified mechanism through which any calculation that has been completed outside of AiiDA, as long as there exists a corresponding `CalcJob` plugin, can be immigrated into an AiiDA database.
@@ -26,15 +26,21 @@ The reasons for this statement are simple.
 The goal of this functionality is to be able to work with completed calculation jobs through AiiDA, whether they were actually run through AiiDA or not.
 Therefore, the attributes of the nodes that represent the calculation job in the provenance graph, as well as the inputs and outputs should respect the same rules, regardless of the origin of the calculation.
 However, since it small differences will be unavoidable (as will be explained in greater detail later) and immigrated calculations *are* different from native ones, it remains important to be able to distinguish them whenever necessary.
+Note that with whatever mark immigrated nodes will be distinguished, this should not be inherited by calculations that use the outputs of immigrated calculations for their inputs.
+The calculations will be linked through the provenance graph and therefore this information will already be included implicitly.
 
 ### Desired functionality
-* Given an existing folder that contains the outputs of a completed calculation job, one should be able to immigrate it, meaning it should be included in the provenance graph, including attributes, inputs and outputs, as if it had been run through AiiDA.
+* Given an existing folder that contains the outputs of a completed calculation job, one should be able to immigrate it, meaning it should be included in the provenance graph, including attributes, inputs and outputs, as if it had been run through AiiDA. The method should account for the possibility that a perfect reconstruction of input nodes from the inputs files will not always be necessarily possible and only a subset of inputs will be able to be parsed.
 * The functionality should allow the folder to be on the local filesystem, as well as on a remote file system, as long as the corresponding computer has been configured in AiiDA
 
 ### Design considerations
+As a first general statement, the immigration functionality should not allow to import data of arbitrary quality: a lot of AiiDA's business logic surrounding the provenance graph, is written to guarantee its consistency and integrity with respect to the data and their interconnections.
+For example, the export functionality does not allow incoherent sub sets of nodes to be exported (for example a process node without its outputs) as, when imported, could lead to a provenance graph that is incomplete or inconsistent.
+The immigration functionality should not be an exception to compromise the integrity of the provenance graph.
+
 The first consideration to be made is the division of labor between `aiida-core` and the code specific plugin in the immigration process.
 A solution that is fully implemented in `aiida-core` is impossible, because it cannot know how to reconstruct the required input data nodes just from the contents of the folder of the completed calculation.
-This process is always going to be plugin specific and so independent of the final mechanism, this code will always have to be provided by the plugin.
+This process is always going to be plugin (and potentially even case) specific and so independent of the final mechanism, this code will always have to be provided by the plugin.
 In a sense, its task is the exact inverse of that of the `CalcJob.prepare_for_submission` method: given a set of input files, reconstruct the AiiDA input data nodes.
 
 Since this step will anyway have to be performed by code from the plugin, at that point the most natural way to proceed is to use the existing mechanism of launching a `CalcJob`.
@@ -73,6 +79,10 @@ Then again, since there is no way for the engine to check if the presented `Code
 The question then becomes whether it is better to not have information at all than to potentially have incorrect information.
 Ultimately though, there are a lot ways to lose provenance in AiiDA and it is always up to the user to try and minimize this.
 Also in this situation one should probably just instruct the user to be aware of this fact and suggest to construct a `Code` and `Computer` instance that represents the actual run code as closely as possible, as it is in their own best interest.
+
+The last point highlights a direct conflict of two interests: from the perspective of the integrity of the provenance graph, we do not want to accept arbitrary data to be imported, but rather want to require that the parsed input data respects the input spec of the relevant `CalcJob` class.
+However, in practical situations (which is ultimately the target of this proposed new functionality), the exact input of some computed output may not always be available anymore and so immigrating it with well-enough reconstructed inputs will not be possible.
+As a first version, it is best to start with a design with strict validation requirements, which can then potentially be relaxed in the future if experience shows that to be acceptable and desirable.
 
 
 ### Design choices
