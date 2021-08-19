@@ -25,7 +25,7 @@ The following statement encapsulates the goal that is to be considered when desi
 The reasons for this statement are simple.
 The goal of this functionality is to be able to work with completed calculation jobs through AiiDA, whether they were actually run through AiiDA or not.
 Therefore, the attributes of the nodes that represent the calculation job in the provenance graph, as well as the inputs and outputs should respect the same rules, regardless of the origin of the calculation.
-However, since it small differences will be unavoidable (as will be explained in greater detail later) and immigrated calculations *are* different from native ones, it remains important to be able to distinguish them whenever necessary.
+However, since small differences will be unavoidable (as will be explained in greater detail later) and immigrated calculations *are* different from native ones, it remains important to be able to distinguish them whenever necessary.
 Note that with whatever mark immigrated nodes will be distinguished, this should not be inherited by calculations that use the outputs of immigrated calculations for their inputs.
 The calculations will be linked through the provenance graph and therefore this information will already be included implicitly.
 
@@ -51,19 +51,16 @@ In addition, the user of AiiDA can use the same interface with which they are al
 
 The only additional information that has to be communicated to the engine in an immigration run over a normal run, is the location of the output files that are to be retrieved.
 Normally, these files are created in a working directory that is created by the engine and is connected as a `RemoteData` node to the calculation job node through a `CREATE` link.
-By simply creating this `RemoteData` from the pre-existing output folder in an immigration run and attaching it as an output of the calculation in the usual way, the retrieval and parse steps that follow proceed exactly as in a normal run.
-On top of that, by using the `RemoteData` concept, the required functionality of supporting output folders on both local as well as remote file systems is automatically fulfilled.
-
-The most natural choice of communicating the location of the output folder to the engine would therefore be a `RemoteData` node and simply pass it in as one of the inputs.
-The base `CalcJob` class would simply define an optional input port `immigrate_remote_folder` that can take a `RemoteData` node.
+For an immigration run, the most natural choice of communicating the location of the output folder to the engine therefore seems to be a `RemoteData` node and simply pass it as one of the inputs.
+The base `CalcJob` class would simply define an optional input port `remote_folder` that can take a `RemoteData` node.
 The benefits of using the `RemoteData` node is that it combines the two pieces of required information, the absolute path of the folder and the computer on which it resides, into one.
 Another option would be to use the `metadata.options` namespace of the `CalcJob` inputs namespace, but there one would have to add at least two fields to host both pieces of information.
-The engine, on detecting the `immigrate_remote_folder` node in the inputs, still runs the pre-submit step, creating the input files from the input nodes and storing them on in the calculation job node's repository, but then instead of proceeding to the `upload` step, adds a `CREATE` link to the `immigrate_remote_folder` input and procedes to the `retrieve` transport task.
-Note that the input link, that normally would be created between the `immigrate_remote_folder` and the calculation job node, because it was an actual input, has to be removed, since otherwise this would break the acyclicity of the DAG.
+The engine, on detecting the `remote_folder` node in the inputs, still runs the pre-submit step, creating the input files from the input nodes and storing them on in the calculation job node's repository, but then instead of proceeding to the `upload` step, sets the `remote_workdir` attribute and procedes to the `retrieve` transport task.
+This retrieve task obtains the location of the to be retrieved files and the list of files that should be retrieved from the node.
 
-With this approach, the resulting provenance graph from an immigrated calculation job will be identical to that of a native run, which is exactly the goal.
-However, sometimes it is still necessary to be able to distinguish between the two.
-Therefore, immigrated calculation job nodes will get a special attribute that marks them as such.
+With this approach, the resulting provenance graph from an immigrated calculation job will be identical to that of a native run (except that the `remote_folder` will be in an input instead of an output for an immigrated job), which is exactly the goal.
+Altough the difference in the `remote_folder` already provides a way to distinguish immigrated jobs from normal ones, it requires the checking of links from the node.
+It would be useful to have a more efficient way to make the distinction, which is why we propose that immigrated calculation job nodes will get a special attribute that marks them as such.
 This can then be used in queries as well as in the normal API to identify immigrated calculation jobs.
 With the current design of AiiDA, it would have made sense to use a "hidden" extra, just as being used for cached calculation jobs, that get an `_aiida_cached_from` extra.
 However, since extras are mutable and can be (accidentally) deleted, this may be too fragile, even though the same problem holds for the caching extra, which, when lost, would also represent significant data loss.
@@ -79,6 +76,8 @@ Then again, since there is no way for the engine to check if the presented `Code
 The question then becomes whether it is better to not have information at all than to potentially have incorrect information.
 Ultimately though, there are a lot ways to lose provenance in AiiDA and it is always up to the user to try and minimize this.
 Also in this situation one should probably just instruct the user to be aware of this fact and suggest to construct a `Code` and `Computer` instance that represents the actual run code as closely as possible, as it is in their own best interest.
+If we decide to make the `Code` and `Computer` optional, we should be aware of the possibility that there might be plugins out there that rely on the fact that these inputs were required, and so, for example, may try to access them directly in the `prepare_for_submission` method without explicit checks or exception handling.
+If this is the case, the proposed immigration method would not work as the `prepare_for_submission` would except in case of the absence of either inputs.
 
 The last point highlights a direct conflict of two interests: from the perspective of the integrity of the provenance graph, we do not want to accept arbitrary data to be imported, but rather want to require that the parsed input data respects the input spec of the relevant `CalcJob` class.
 However, in practical situations (which is ultimately the target of this proposed new functionality), the exact input of some computed output may not always be available anymore and so immigrating it with well-enough reconstructed inputs will not be possible.
@@ -87,11 +86,11 @@ As a first version, it is best to start with a design with strict validation req
 
 ### Design choices
 * The immigration functionality will use the same infrastructure as native calculation job runs as much as possible to reduce the chances from undesirable differences in outcome.
-* The user interface to immigrate a completed calculation job will use the same launchers as normal calculation jobs. This means that `run` and `submit` of the `aiida.engine.launch` module will be used to immigrate calculations.
-* The location of the output files will be communicated to the engine by means of a `RemoteData` node passed in the inputs under the name `immigrate_remote_data`.
-* The `immigrate_remote_data` input will **not** receive an input link like it would normally, but instead gets a `CREATE` link with the label `remote_data`.
-* The `Code` input remains required on the base `CalcJob` node and the documentation will instruct the user to create a `Code` instance that represents the actually run code as closely as possible.
+* The user interface to immigrate a completed calculation job will use the same launchers as normal calculation jobs. This means that `run` and `submit` of the `aiida.engine.launch` module will be used to immigrate calculations. We should see whether `submit` should simply pipe through to `run` under the hood, or whether there is an actual use case of having immigration jobs be sent to the daemon.
+* The location of the output files will be communicated to the engine by means of a `RemoteData` node passed in the inputs under the name `remote_folder`.
+* The `Code` input and `Computer` inputs will no longer be required, as long as there is `remote_folder` input which signals an immigration job. It will still be possible to pass a `Code` and/or `Computer` and they will be linked to the job as usual, but there will be no consistency check between them and  the files that are to be imported. It is the responsibility of the user to make sure that the associated code and computer make sense.
 * The created calculation job node, will have an attribute `immigrated=True`.
+* The `aiida-core` package will provide a new entry point group called `aiida.calculations.immigrators` in which implementations of the `CalcJobImmigrator` class can be added. They can be loaded through a `CalcJobImmigratorFactory`. The class implements a single method called `parse_remote_data` which parses the input files contained within a `RemoteData`, together with optional keyword arguments that are plugin specific, and returns a dictionary of inputs that could be used to launch a job of the associated `CalcJob` plugin.
 
 ### Open questions
 * Should an immigrated calculation be considered as a valid node by the caching mechanism?
@@ -103,8 +102,8 @@ Below an example of the user interface that would follow when implementing the p
     computer = load_computer('localhost')
     remote_data = RemoteData('/absolute/path/to/outputs', computer=computer)
 
-    inputs = get_inputs_from_folder(remote_data)  # This is functionality that will have to be provided by the specific calculation job plugin
-    inputs['immigrate_remote_data'] = remote_data
+    inputs = CalcJobClass.get_immigrator().parse_remote_data(remote_data)  # This is functionality that will have to be provided by the specific calculation job plugin
+    inputs['remote_folder'] = remote_data
     results, node = run.get_node(CalcJobClass, **inputs)
 
     assert node.get_attribute('immigrated')
@@ -119,12 +118,12 @@ However, there are pros and cons in the proposed design of the user interface, w
 * The dedicated `immigrated` attribute makes it still possible to distinguish immigrated calculations both in querying as through the API, when necessary.
 * Using the same user interface to launch immigration jobs as for native jobs makes it easier for users to understand it and prevents them from having to learn yet another method, with the corresponding imports.
 * By using the same infrastructure *and* interface, the immigration of jobs can even be seamlessly integrated with existing workchains.
-  For example, an existing `BaseRestartWorkChain` will automatically expose the `immigrate_remote_data` input port and so the user can even pass this to the workchain and have the calculation immigrated *through* the workchain, without having to change a single line of code in the workchain itself.
+  For example, an existing `BaseRestartWorkChain` will automatically expose the `remote_folder` input port and so the user can even pass this to the workchain and have the calculation immigrated *through* the workchain, without having to change a single line of code in the workchain itself.
   If one chooses to use a separate interface, this functionality is barred off, unless the workchain code is updated explicitly to accommodate this possibility.
 * By purposefully not providing a basic interface for the conversion of output files to inputs nodes in `aiida-core`, we do not run the risk that it is not generic enough for certain calculation job plugins.
 
 ### Cons
-* The similarity in launching mechanism for native and immigration calculation jobs may actually be confusing to users. The fact that the only difference is the additional `immigrate_remote_folder` input node, might go overlooked.
+* The similarity in launching mechanism for native and immigration calculation jobs may actually be confusing to users. The fact that the only difference is the additional `remote_folder` input node, might go overlooked.
   I actually think this will not be a problem but I am including it here as it has been brought up as a con of the current design by other in private conversations.
   Since one actually have to construct a `RemoteData` and include it in the inputs, I do not think that this happens by accident or to an unexpecting user.
 * By purposefully not providing a basic interface for the conversion of output files to inputs nodes in `aiida-core`, we run the risk that the various solutions and their interfaces, that will be designed and provided by the plugins will be wildly disparate.
