@@ -1,4 +1,4 @@
-# (Web) AiiDA PIDData type
+# New (web) AiiDA PIDData type
 
 | AEP number | 006 Web PID datatype                                              |
 |------------|-------------------------------------------------------------------|
@@ -39,7 +39,7 @@ One could implement a new datatype (similar to git-annex features), which only s
 with some additional metadata (which might be available on the website it self), so that no large files are stored in the database and repository. So it represents persistent data somewhere else,
 which can be used within the AiiDA system without it becoming part of the database or repository, while keeping the provenance.
 This datatype should have some functionally to automatically download the (remote, web) data if it is needed (within a calcfunction) and cache the data
-locally (outside the repository and database) for use, so that is downloaded only once, and does not become part of any AiiDA exports.
+locally (outside the repository and database) for use, so that it is downloaded only once, and does not become part of any AiiDA exports.
 This functionality is needed, to be make code using this data object runnable and reproducible.
 
 Maybe add an option to also add this data to the repository, if wanted.
@@ -61,5 +61,5 @@ For implementing an additional datatype.
 ### Cons
 
 * The same could be used for non persistent links, which would not be good for long term provenance
-* It could even be miss used to do such things with local files (so no persistence at all). One might be able to think implement some checks here.
+* It could even be miss used to do such things with local files (so no persistence at all). One might be able to implement some checks here.
 
