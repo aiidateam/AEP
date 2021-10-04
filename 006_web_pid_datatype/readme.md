@@ -1,4 +1,4 @@
-# AiiDA new (web) PIDData type
+# (Web) AiiDA PIDData type
 
 | AEP number | 006 Web PID datatype                                              |
 |------------|-------------------------------------------------------------------|
@@ -7,7 +7,7 @@
 | Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi)   |
 | Type       | S - Standard                                                      |
 | Created    | 04-Oct-2021                                                       |
-| Status     | draft                                                             |
+| Status     | submitted                                                             |
 
 ## Background
 
@@ -55,11 +55,11 @@ For implementing an additional datatype.
 
 * Reduce repository size (significantly)
 * Enable easy provenance keeping of external data persistent sources of all kinds (like some data on materials cloud or elsewhere)
-* Provides a clear why, standard within AiiDA on how to keep the provenance of external data.
+* Provides a clear way, standard within AiiDA on how to keep the provenance to external persistent data.
 
 
 ### Cons
 
 * The same could be used for non persistent links, which would not be good for long term provenance
-* It could even be miss used to do such things with local files (so no persistence at all). One might be able to think about some checks here.
+* It could even be miss used to do such things with local files (so no persistence at all). One might be able to think implement some checks here.
 
