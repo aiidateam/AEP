@@ -1,22 +1,22 @@
 # Efficient object store for the AiiDA repository
 
-| AEP number | 003                                                          |
+| AEP number | 006                                                          |
 |------------|--------------------------------------------------------------|
 | Title      | Efficient object store for the AiiDA repository              |
 | Authors    | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi)|
-| Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi), [Francisco Ramirez](mailto:francisco.ramirez@epfl.ch) (ramirezfranciscof), [Sebastiaan P. Huber](mailto:sebastiaan.huber@epfl.ch) (sphuber)  |
+| Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi), [Francisco Ramirez](mailto:francisco.ramirez@epfl.ch) (ramirezfranciscof), [Sebastiaan P. Huber](mailto:sebastiaan.huber@epfl.ch) (sphuber) [Chris J. Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell)  |
 | Type       | S - Standard Track AEP                                       |
 | Created    | 17-Apr-2020                                                  |
-| Status     | submitted                                                    |
+| Status     | implemented                                                  |
 
 ## Background 
-AiiDA writes the "content" of each node in two places: attributes in the database, and files
+AiiDA 0.x and 1.x writes the "content" of each node in two places: attributes in the database, and files
 (that do not need fast query) in a disk repository.
 These files include for instance raw inputs and outputs of a job calculation, but also other binary or
 textual information best stored directly as a file (some notable examples: pseudopotential files,
 numpy arrays, crystal structures in CIF format).
 
-Currently, each of these files is directly stored in a folder structure, where each node "owns" a folder whose name
+In AiiDA 0.x and 1.x, each of these files is directly stored in a folder structure, where each node "owns" a folder whose name
 is based on the node UUID with two levels of sharding
 (that is, if the node UUID is `4af3dd55-a1fd-44ec-b874-b00e19ec5adf`,
 the folder will be `4a/f3/dd55-a1fd-44ec-b874-b00e19ec5adf`).
@@ -50,18 +50,22 @@ We emphasize that having many inodes (files or folders) is a big problem. In par
 
 
 ## Proposed Enhancement 
-The goal of this project is to have a very efficient implementation of an "object store" (or, more correctly, a key-value store) that:
+The goal of this proposal is to have a very efficient implementation of an "object store" (or, more correctly, a key-value store) that:
 - works directly on a disk folder (i.e. only requires access to a folder on a disk);
 - ideally, does not require a service to be running in the background,
   to avoid to have to ask users to run yet another service to use AiiDA;
 - and addresses a number of performance issues mentioned above and discussed more in detail below.
 
-**NOTE**:  This AEP does not address the actual implementation of the object store in AiiDA, but
-rather the implementation of an object store to solve a number of performance issues.
+**NOTE**:  This AEP does not address the actual implementation of the object store within AiiDA, but
+rather the implementation of an object-store-like service as an independent package, to solve a number of performance issues. This is now implemented as part of the [disk-objecstore](https://github.com/aiidateam/disk-objectstore) package that will be used by AiiDA from version 2.0.
+
 The description of the integration with AiiDA will be discussed in a different AEP
 (see [PR #7](https://github.com/aiidateam/AEP/pull/7) for some preliminary discussion, written before this AEP).
 
 ## Detailed Explanation 
+
+**NOTE**: This document discusses the reasoning behind the implementation of the `disk-objectstore`. The implementation details reflect what is in the libary as of version 0.6.0 (as of late 2021). It should be *not* considered as a documentation of the `disk-objectstore` package (as the implementation choices might be adapted in the future), but rather as a reference of the reason for the introduction of the package, of the design decisions, and of why they were made.
+
 The goal of this AEP is to define some design decisions for a library (an "object store", to be used internally by AiiDA) that,
 given a stream of bytes, stores it as efficiently as possible somewhere, assigns a unique key (a "name") to it,
 and then allows to retrieve it with that key.
@@ -82,8 +86,8 @@ The core idea behind the object store implementation is that, instead of writing
 are packed into a few big files, and an index of some sort keeps track of where each object is in the big file.
 This is for instance what also git does internally.
 
-However, one cannot write directly into a pack file: this would be inefficient, especially because of a key requirement:
-multiple Unix processes must be able to write efficiently and *concurrently*, i.e. at the same time, without data
+However, one cannot write directly into a pack file: this would be inefficient and also not robust, especially because of a key requirement:
+multiple Unix processes (AiiDA verdi shells, the various damon workers, ...) must be able to write efficiently and *concurrently*, i.e. at the same time, without data
 corruption (for instance, the AiiDA daemon is composed of multiple
 concurrent workers accessing the repository). 
 Therefore, as also `git` does, we introduce the concept of `loose` objects (where each object is stored as a different
@@ -91,13 +95,13 @@ file) and of `packed` objects when these are written as part of a bigger pack fi
 
 The key concept is that we want maximum performance when writing a new object.
 Therefore, each new object is written, by default, in loose format. 
-Periodically, a packing operation can be executed, taking loose objects and moving them into packs.
+Periodically, a packing operation can be executed (in a first version this will be triggered manually by the users and properly documented; in the future, we might think to automatic triggering this based on performance heuristics), moving loose objects into packs.
 
 Accessing an object should only require that the user of the library provides its key, and the concept of packing should
 be hidden to the user (at least when retrieving, while it can be exposed for maintenance operations like repacking).
 
 #### Efficiency decisions
-Here are some possible decisions. These are based on a compromise between
+Here follows a discussion of some of the decisions that were made in the implementation. These are based on a compromise between
 the different requirements, and represent what can be found in the current implementation in the
 [disk-objectstore](https://github.com/giovannipizzi/disk-objectstore) package.
 
@@ -117,25 +121,22 @@ the different requirements, and represent what can be found in the current imple
   In this way, we can rely simply on the fact that an object present in the folder of loose objects signifies that the object exists, without needing a centralised place to keep track of them.
   
   Having the latter would be a potential performance bottleneck, as if there are many concurrent
-  writers, the object store must guarantee that the central place is kept updated.
+  writers, the object store must guarantee that the central place is kept updated (and e.g. using a SQLite database for this - as it's used for the packs - is not a good solution because only one writer at a time can act on a SQLite database, and all others have to wait and risk to timeout).
 
 - Packing can be triggered by the user periodically, whenever the user wants.
   Here, and in the following, packing means bundling loose objects in a few
   "pack" files, possibly (optionally) compressing the objects.
-  It should be ideally possible to pack while the object store
+  A key requirement is that it should be possible to pack while the object store
   is in use, without the need to stop its use (which would in turn 
   require to stop the use of AiiDA and the deamons during these operations).
   This is possible in the current implementation, but might temporarily impact read performance while repacking (which is probably acceptable).
   Instead, it is *not* required that packing can be performed in parallel by multiple processes
   (on the contrary, the current implementation actually tries to prevent multiple processes trying to perform
-  write operations on packs concurrently).
+  write operations on packs at the same time: i.e., only a single packer process should perform the operation at any given time).
 
-- In practice, this operation takes all loose objects and puts them in a controllable number
-  of packs. The name of the packs is given by the first few letters of the UUID
-  (by default: 2, so 256 packs in total; configurable). A value of 2 is a good balance
-  between the size of each pack (on average, ~4GB/pack for a 1TB repository) and
-  the number of packs (having many packs means that, even when performing bulk access,
-  many different files need to be open, which slows down performance).
+- In practice, this packing operation takes all loose objects and puts them in a controllable number
+  of packs. The name of the packs is given by an integer. A new pack is created when all previous ones are "full", where full is defined when the pack size goes beyond a threshold (by default 4GB/pack. 
+  This size is a good compromise: it's similar to a "movie" file, so not too big to deal with (can fit e.g. in a disk, people are used to deal with files of a few GBs) so it's not too big, but it's big enough so that even for TB-large repositories, the number of pakcs is of the order of a few tens, and therefore this solves the issue of having millions of files.
 
 - Pack files are just concatenation of bytes of the packed objects. Any new object
   is appended to the pack (thanks to the efficiency of opening a file for appending).
@@ -143,20 +144,19 @@ the different requirements, and represent what can be found in the current imple
   database for the whole set of objects, as we describe below.
 
 - Packed objects can optionally be compressed. Note that compression is on a 
-  per-object level. The fact an object is compressed is stored in the index. When 
+  per-object level. The information on whether an object is compressed or not is stored in the index. When 
   the users ask for an object, they always get back the uncompressed version (so
   they don't have to worry if objects are compressed or not when retrieving them).
-  This allows much greater flexibility, and avoid e.g. to recompress files that are already compressed.
-  One could also think to clever logic ot heuristics to try to compress a file, but then store it
+  This allows much greater flexibility, and avoid e.g. to decide to avoid to recompress files that are already compressed or where compression would give little to no benefit.
+  In the future, one could also think to clever logic or heuristics to try to compress a file, but then store it
   uncompressed if it turns out that the compression ratio is not worth the time
   needed to further uncompress it later.
   At the moment, one compression will be chosen and used by default (currently
   zlib, but in issues it has been suggested to use more modern formats like
   `xz`, or even better [snappy](https://github.com/google/snappy) that is very fast and designed for purposes
   like this).
-  In the future, if we want, it would be easy to make the compression library
-  an option, and store this in the JSON that contains the settings of the
-  container.
+  The compression library is already an option, and which one to use is stored in the JSON file that contains the settings of the
+  object-store container.
 
 - A note on compression: the user can always compress objects first, and then store
   a compressed version of them and take care of remembering if an object
@@ -186,8 +186,7 @@ the different requirements, and represent what can be found in the current imple
   compared to ~44.5s when using 100'000 independent calls (still probably acceptable).
   Moreover, even getting, in 10 bulk calls, 10 random chunks of the objects (eventually
   covering the whole set of 100'000 objects) only takes ~3.4s. This should demonstrate
-  that exporting a subset of the graph should be efficient (and the object store format
-  could be used also inside the export file). Also, this should be compared to minutes to hours
+  that exporting a subset of the graph should be efficient. Also, this should be compared to minutes to hours
   when storing each object as individual files.
 
 - All operations internally (storing to a loose object, storing to a pack, reading
@@ -200,42 +199,29 @@ the different requirements, and represent what can be found in the current imple
 
 #### Further design choices
 
-- Each given object will get a random UUID as a key (its generation cost is negligible, about
-  4 microseconds per UUID).
-  It's up to the caller to track this into a filename or a folder structure.
-  The UUID is generated by the implementation and cannot be passed from the outside.
-  This guarantees random distribution of objects in packs, and avoids to have to
-  check for objects already existing (that can be very expensive).
+- The key of an object will be its hash. For each container, one can decide which hash algorithm to use; the default one is `sha256` that offers a good compromise between speed and avoiding risk of collisions. Once an object is stored, it's the responsibility of the `disk-objectstore` library to return the hash of the object that was just stored.
+
+- Using a hash means that we automatically get deduplication of content: if an object is asked to be written, once the stream is received, if the library detects that the object is already present, it will still return the hash key but not store it twice. So, from the point of view of the end application (AiiDA), it does not need to know that deduplication is performed: it just has to send a sequence of bytes, and store the corresponding hash key returned by the library
+
+- The hashing library can be decided for each container and is configurable; however, for performance reasons, in AiiDA it will be better to decide and stick to one only algorithm: this will allow to compare e.g. two different repositories (e.g. when sharing data and/or syncing) and establish if data already exists by just comparing the hashes. If different hash algorithms are instead used by the two containers, one needs to do a full data transfer of the whole container, to discover if new data needs to be transfered or not.
 
 - Pack naming and strategy is not determined by the user. Anyway it would be difficult
   to provide easy options to the user to customize the behavior, while implementing
-  a packing strategy that is efficient. Moreover, with the current packing strategy,
-  it is immediate to know in which pack to check without having to keep also an index
-  of the packs (this, however, would be possible to implement in case we want to extend the behavior,
-  since anyway we have an index file). But at the moment it does not seem necessary. Possible future changes of the internal packing format should not
-  affect the users of the library, since users only ask to get an object by UUID,
+  a packing strategy that is efficient. Which object is in which pack is tracked in the SQLite database. 
+  But at the moment it does not seem necessary. Possible future changes of the internal packing format should not
+  affect the users of the library, since users only ask to get an object by hash key,
   and in general they do not need to know if they are getting a loose object,
   a packed object, from which pack, ...
 
 - For each object, the SQLite database contains the following fields, that can be considered
-  to be the "metadata" of the packed object: its key (`uuid`), the `offset` (starting
+  to be the "metadata" of the packed object: its key (`hashkey`), the `offset` (starting
   position of the bytestream in the pack file), the `length` (number of bytes to read),
   a boolean `compressed` flag, meaning if the bytestream has been zlib-compressed,
   and the `size` of the actual data (equal to `length` if `compressed` is false,
   otherwise the size of the uncompressed stream, useful for statistics for instance, or
   to inform the reader beforehand of how much data will be returned, before it starts
   reading, so the reader can decide to store in RAM the whole object or to process it
-  in a streaming way).
-
-- A single index file is used. Having one pack index per file, while reducing a bit
-  the size of the index (one could skip storing the first part of the UUID, determined
-  by the pack naming) turns out not to be very effective. Either one would keep all
-  indexes open (but then one quickly hits the maximum number of open files, that e.g.
-  on Mac OS is of the order of ~256), or open the index, at every request, that risks to
-  be quite inefficient (not only to open, but also to load the DB, perform the query,
-  return the results, and close again the file). Also for bulk requests, anyway, this
-  would prevent making very few DB requests (unless you keep all files open, that
-  again is not feasible).
+  in a streaming way). In addition, it tracks the number of the pack in which the object is stored.
 
 - We decided to use SQLite because of the following reasons:
   - it's a database, so it's efficient in searching for the metadata
@@ -245,12 +231,12 @@ the different requirements, and represent what can be found in the current imple
     useful to allow to continue normal operations by many Unix processes during repacking;
   - we access it via the SQLAlchemy library that anyway is already
     a dependency of AiiDA, and is actually the only dependency of the
-    current object-store implementation.
-  - it's quite widespread and so the libary to read and write should be reliable.
+    current object-store implementation;
+  - it's quite widespread and so the libary to read and write should be reliable; in addition, SQLite has a clear [long-term support planning](https://www.sqlite.org/lts.html).
 
 - Deletion can just occur efficiently as either a deletion of the loose object, or
   a removal from the index file (if the object is already packed). Later repacking of the packs can be used to recover
-  the disk space still occupied in the pack files.
+  the disk space still occupied in the pack files. It is hard to find a better strategy that does not require manual repacking but gives all other guarantees especially for fast live operations (as a reference, also essentially all databases do the same and have a "vacuum" operation that is in a sense equivalent to the concept of repacking here).
 
 - The object store does not need to provide functionality to modify
   an object. In AiiDA, files of nodes are typically only added, and once
@@ -263,7 +249,7 @@ the different requirements, and represent what can be found in the current imple
 - The current packing format is `rsync`-friendly (that is one of the original requirements). 
   `rsync` has a clever rolling algorithm that can divides each file in blocks and
   detects if the same block is already in the destination file, even at a different position. 
-  Therefore, if content is appended to a pac file, or even if a pack is "repacked" (e.g. reordering
+  Therefore, if content is appended to a pack file, or even if a pack is "repacked" (e.g. reordering
   objects inside it, or removing deleted objects) this does not prevent efficient
   rsync transfer (this has been tested in the implementation).
 
@@ -273,7 +259,7 @@ the different requirements, and represent what can be found in the current imple
 
 - Appending content to a single file does not prevent the Linux disk cache to work efficiently.
   Indeed, the caches are per blocks/pages in linux, not per file.
-  Concatenating to files does not impact performance on cache efficiency. What is costly is opening a file as the filesystem
+  Concatenating to files does not impact performance on cache efficiency. What is costly is opening a file, as the filesystem
   has to provide some guarantees e.g. on concurrent access.
   As a note, seeking a file to a given position is what one typically does when watching a 
   video and jumping to a different section.
@@ -281,19 +267,23 @@ the different requirements, and represent what can be found in the current imple
 - Packing in general, at this stage, is left to the user. We can decide (at the object-store level, or probably
   better at the AiiDA level) to suggest the user to repack, or to trigger the repacking automatically.
   This can be a feature introduced at a second time. For instance, the first version we roll out could just suggest
-  to repack periodically in the docs to repack.
-  This could be a good approach, also to bind the repacking with the backing up (at the moment, 
+  to repack periodically in the docs.
+  This could be a good approach, also to bind the repacking with the backups (at the moment, 
   probably backups need to be executed using appropriate scripts to backup the DB index and the repository
   in the "right order", and possibly using SQLite functions to get a dump).
-  As a note, even if repacking is never done, the situation is anyway as the current one in AiiDA, and actually
-  a bit better because getting the list of files for a node without files wouldn't need anymore to access the disk,
-  and similarly there wouldn't be anymore empty folders created for nodes without files.
+
+*  As a note: even if repacking is never done by the user, the situation is anyway improved with respect to the current one in AiiDA: 
+  * an index of files associated with an AiiDA node will now be stored in the AiiDA DB, so getting the list of files associated to a node without content will not need anymore to access the disk;
+  
+  * there wouldn't be anymore empty folders created for nodes without files;
+
+  * automatic deduplication of the data is now done transparently.
   
   In a second phase, we can print suggestions, e.g. when restarting the daemon,
   that suggests to repack, for instance if the number of loose objects is too large. 
-  We can also provide `verdi` commands for this.
+  We will also provide `verdi` commands to facilitate the user in these maintenance operations.
 
-  Finally, if we are confident that this approach works fine, we can also automate the repacking. We need to be careful
+  Finally, in the future if we are confident that this approach works fine, we can also automate the repacking. We need to be careful
   that two different processes don't start packing at the same time, and that the user is aware that packing will be
   triggered, that it might take some time, and that the packing process should not be killed
   (this might be inconvenient, and this is why I would think twice before implementing an automatic repacking).
@@ -325,61 +315,21 @@ In particular:
 - One option we didn't investigate is the mongodb object store. Note that this would require running a server
   though (but could be acceptable if for other reasons it becomes advantageous).
 
-Finally, as a note, we stress that an efficient implementation in about 1'000 lines of code has been
-already implemented, so the complexity of writing an object store library is not huge (at the cost, however,
-of having to stress test ourselves that the implementation is bug-free).
-
-### UUIDs vs SHA hashes
-
-One thing to discuss is whether to replace a random UUID with a strong hash of the content
-(e.g. SHA1 as git does, or some stronger hash). 
-The clear advantage is that one would get "for free" the possibility to deduplicate identical 
-files. Moreover, computation of hashes even for large files is very fast (comparable to the generation of a UUID)
-even for GB files.
-
-However, this poses a few of potential problem: 
-
-- if one wants to work in streaming mode, the hash could be computed only at the *end*, 
-  after the whole stream is processed. While this is still ok for loose objects, this is a problem
-  when writing directly to packs. One possible workaround could be to decide that objects are added
-  to random packs, and store the pack as an additional column in the index file.
-
-- Even worse, it is not possible to know if the object already exists before it has been completely received
-  (and therefore written somewhere, because it might not fit in memory). Then one would need to perform a search
-  if an object with the same hash exists, and possibly discard the file (that might actually have been already written to a pack).
-  Finally, one needs to do this in a way that works also for concurrent writes, and does not fail if two processes
-  write objects with the same SHA at the same time.
-
-- One could *partially* address the problem, for bulk writes, by asking the user to provide the hash beforehand. However, 
-  I think it is a not a good idea; instead, it is better keep stronger guarantees at the library level:
-  otherwise one has to have logic to decide what to do if the hash provided by the user turns out to be wrong.
-
-- Instead, the managing of hashing could be done at a higher level, by the AiiDA repository implementation: anyway 
-  the repository needs to keep track of the filename and relative path of each file (within the node repository), 
-  and the corresponding object-store UUIDs. The implementation could then also compute and store the hash in some
-  efficient way, and then keep a table mapping SHA hashes to the UUIDs in the object store, and take care of the
-  deduplication.
-  This wouldn't add too much cost, and would keep a separation of concerns so that the object-store implementation can be simpler, 
-  give higher guarantees, be more robust, and make it simpler to guarantee that data is not corrupted even for concurrent access.
-
 ## Pros and Cons 
 
 ### Pros
 * Is very efficient also with hundreds of thousands of objects (bulk reads can read all objects in a couple of seconds).
 * Is rsync-friendly, so one can suggest to use directly rsync for backups instead of custom scripts.
-* An implementation exists, seems to be very efficient, and is
+* A library (`disk-objectstore`) has already been implemented, seems to be very efficient, and is
   relatively short (and already has tests with 100% coverage,
   including concurrent writes, reads, and one repacking process, and checking on three platforms: linux, mac os, and windows).
 * It does not add any additional python depenency to AiiDA, and it
   does not require a service running.
-* It can be used also for the internal format of AiiDA export files,
-  and this should be very efficient, even to later retrieve just
-  a subset of the files.
 * Implements compression in a transparent way.
 * It shouldn't be slower than the current AiiDA implementation in writing
   during normal operation, since objects are stored as loose objects.
   Actually, it might be faster for nodes without files, as no disk
-  access will be needed anymore.
+  access will be needed anymore, and automatically provides deduplication of files.
 
 ### Cons
 * Extreme care is needed to convince ourselves that there are no
@@ -388,9 +338,7 @@ However, this poses a few of potential problem:
   not performed, the performance will be the same as the one currently of AiiDA,
   that stores essentially only loose objects. Risks of data corruption need
   to be carefully assessed mostly while packing.
-* Object metadata must be tracked by the caller in some other database.
-  Similarly, deduplication via SHA hashes is not implemented and need to be
-  implemented by the caller.
+* Object metadata must be tracked by the caller in some other database (e.g. AiiDA will have, for each node, a list of filenames and the corresponding hash key in the disk-objectstore).
 * It is not possible anymore to access directly the folder of a node by opening
   a bash shell and using `cd` to go the folder,
   e.g. to quickly check the content. 
