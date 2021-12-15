@@ -154,7 +154,6 @@ These are based on a compromise between the different requirements, and represen
 - Pack naming and strategy is not determined by the user.
   Anyway it would be difficult to provide easy options to the user to customize the behavior, while implementing a packing strategy that is efficient.
   Which object is in which pack is tracked in the SQLite database.
-  But at the moment it does not seem necessary.
   Possible future changes of the internal packing format should not affect the users of the library, since users only ask to get an object by hash key, and in general they do not need to know if they are getting a loose object, a packed object, from which pack, etc.
 
 - For each object, the SQLite database contains the following fields, that can be considered to be the "metadata" of the packed object: its `hashkey`, the `offset` (starting position of the bytestream in the pack file), the `length` (number of bytes to read), a boolean `compressed` flag, meaning if the bytestream has been zlib-compressed, and the `size` of the actual data (which is equal to `length` if `compressed` is false, or the size of the uncompressed stream otherwise).
