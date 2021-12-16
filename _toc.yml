@@ -1,0 +1,11 @@
+root: README.md
+subtrees:
+- caption: Proposals 
+  entries:
+  - file: 000_aep_guidelines/readme.md
+  - file: 001_drop_python2/readme.md
+  - file: 002_dependency_management/readme.md
+  - file: 003_adopt_nep_29/readme.md
+  - file: 004_calcjob_importer/readme.md
+  - file: 005_exportformat/readme.md
+  - file: 006_efficient_object_store_for_repository/readme.md
