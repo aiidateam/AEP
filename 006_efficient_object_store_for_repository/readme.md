@@ -1,4 +1,4 @@
-# Efficient object store for the AiiDA repository
+# AEP 006: Efficient object store for the AiiDA repository
 
 | AEP number | 006                                                          |
 |------------|--------------------------------------------------------------|

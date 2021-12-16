@@ -1,4 +1,4 @@
-# Schedule for drop of support of Python 2.7
+# AEP 001: Schedule for drop of support of Python 2.7
 
 | AEP number | 001                                                          |
 |------------|--------------------------------------------------------------|

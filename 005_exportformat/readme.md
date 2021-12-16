@@ -1,13 +1,13 @@
-# AiiDA Archive Format
+# AEP 005: Improved export archive format
 
 | AEP number | 005                                                              |
 |------------|------------------------------------------------------------------|
-| Title      | Implement a new archive export format                            |
+| Title      | Improved export archive format                                   |
 | Authors    | [Chris Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell) |
-| Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi) |
+| Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi)  |
 | Type       | S - Standard                                                     |
 | Created    | 18-Sept-2020                                                     |
-| Status     | draft                                                        |
+| Status     | implemented                                                      |
 
 ## Background
 

@@ -1,8 +1,8 @@
-# AiiDA Dependency Management
+# AEP 002: Dependency Management
 
 | AEP number | 002                                                          |
 |------------|--------------------------------------------------------------|
-| Title      | AiiDA Dependency Management                                  |
+| Title      | Dependency Management                                        |
 | Authors    | [Carl S. Adorf](mailto:simon.adorf@epfl.ch) (csadorf)        |
 | Champions  | [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)    |
 | Type       | P - Process                                                  |

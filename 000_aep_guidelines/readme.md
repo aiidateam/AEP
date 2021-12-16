@@ -1,4 +1,4 @@
-# AiiDA Enhancement Proposal (AEP) Guidelines
+# AEP 000: AiiDA Enhancement Proposal (AEP) Guidelines
 
 | AEP number | 000                                                          |
 |------------|--------------------------------------------------------------|
