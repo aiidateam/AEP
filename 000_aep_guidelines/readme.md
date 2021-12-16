@@ -44,7 +44,7 @@ A table containing:
   * date of creation
   * date of last modification
   * status: one of
-    * `draft` - this AEP has been accepted, and people are actively discussing and implementing it (further modifications may be necessary)
+    * `draft` - this AEP has been accepted for further discussion and development
     * `implemented` - this AEP has been implemented
     * `postponed` - this AEP is no longer active, might be interesting for the project but has noone willing to champion it
     * `rejected` - this AEP has been rejected and will not be implemented
