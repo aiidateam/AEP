@@ -1,13 +1,13 @@
-# AiiDA Enhancement Proposal (AEP) Guidelines
+# AEP 004: Infrastructure to import completed calculation jobs
 
 | AEP number | 004                                                          |
 |------------|--------------------------------------------------------------|
-| Title      | Infrastructure to import completed calculation jobs       |
+| Title      | Infrastructure to import completed calculation jobs          |
 | Authors    | [Sebastiaan P. Huber](mailto:mail@sphuber.net) (sphuber)     |
 | Champions  |                                                              |
 | Type       | S - Standard Track AEP                                       |
 | Created    | 19-Apr-2020                                                  |
-| Status     | submitted                                                    |
+| Status     | implemented                                                  |
 
 ## Background
 When new users come to AiiDA, often they will already have completed many simulations without the use of AiiDA.
