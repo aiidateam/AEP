@@ -224,3 +224,5 @@ tags
 # End of https://www.gitignore.io/api/vim,python,pycharm
 
 .DS_Store
+.vscode/
+_build/

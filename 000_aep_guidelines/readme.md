@@ -74,7 +74,7 @@ A summary for pros and cons for the proposed enhancement, detailing e.g. which p
    and put readme file in [Markdown](https://guides.github.com/features/mastering-markdown/) format inside this folder.
      * You may use this `readme.md` as a template.
      * You may use the folder to include additional files relevant to your enhancement proposal.
-     * Add your AEP to the `README.md` at the top level of the repository.
+     * Add your AEP to the `README.md` and `_toc.yml` files at the root of the repository.
      * Consider discussing your proposal informally with an [AiiDA team](https://github.com/orgs/aiidateam/people) member to get an initial reaction
        and, potentially, another champion for your proposal.
 3. Commit your changes and submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the AEP repository
