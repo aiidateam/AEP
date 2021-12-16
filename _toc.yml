@@ -9,3 +9,4 @@ subtrees:
   - file: 004_calcjob_importer/readme.md
   - file: 005_exportformat/readme.md
   - file: 006_efficient_object_store_for_repository/readme.md
+  - file: 007_improved_file_repository/readme.md

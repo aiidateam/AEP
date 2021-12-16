@@ -43,7 +43,7 @@ The goal of this proposal is to have a very efficient implementation of an "obje
 **NOTE**:  This AEP does not address the actual implementation of the object store within AiiDA, but rather the implementation of an object-store-like service as an independent package, to solve a number of performance issues.
 This is now implemented as part of the [disk-objecstore](https://github.com/aiidateam/disk-objectstore) package that will be used by AiiDA from version 2.0.
 
-The description of the integration with AiiDA will be discussed in a different AEP (see [PR #7](https://github.com/aiidateam/AEP/pull/7) for some preliminary discussion, written before this AEP).
+The integration with AiiDA will be described in AEP 007.
 
 ## Detailed Explanation 
 
