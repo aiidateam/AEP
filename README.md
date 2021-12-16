@@ -5,6 +5,8 @@ It is similar to [PEPs](https://www.python.org/dev/peps/) of the Python core lan
 
 The purpose is to publicly discuss new features & design choices in the AiiDA ecosystem and to document the decision making process.
 
+Accepted AEPs can be easily browsed and read on the [online documentation](https://aep.readthedocs.io/) or directly on this repository through the index below.
+
 ## Index of AEPs
 
 | Number | Status           | Title                                                                                                  |
