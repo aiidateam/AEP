@@ -7,7 +7,6 @@
 | Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi), [Francisco Ramirez](mailto:francisco.ramirez@epfl.ch) (ramirezfranciscof), [Sebastiaan P. Huber](mailto:sebastiaan.huber@epfl.ch) (sphuber) [Chris J. Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell)  |
 | Type       | S - Standard Track AEP                                       |
 | Created    | 17-Apr-2020                                                  |
-| Last modified | 15-Dec-2021                                               |
 | Status     | implemented                                                  |
 
 ## Background 

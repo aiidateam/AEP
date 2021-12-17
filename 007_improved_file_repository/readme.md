@@ -7,7 +7,6 @@
 | Champions  | [Sebastiaan P. Huber](mailto:sebastiaan.huber@epfl.ch) (sphuber) [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)|
 | Type       | S - Standard                                                    |
 | Created    | 18-Oct-2019                                                     |
-| Last modified | 16-Dec-2021                                                  |
 | Status     | submitted                                                       |
 
 ## Background

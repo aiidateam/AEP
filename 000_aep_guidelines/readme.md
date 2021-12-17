@@ -7,7 +7,6 @@
 | Champions  | [Kevin M. Jablonka](mailto:kevin.jablonka@epfl.ch) (kjappelbaum), [Leopold Talirz](mailto:leopold.talirz@epfl.ch) (ltalirz)|
 | Type       | P - Process                                                  |
 | Created    | 19-Mar-2019                                                  |
-| Last modified | 17-Dec-2021                                               |
 | Status     | implemented                                                  |
 
 ## Background 
@@ -42,7 +41,6 @@ A table containing:
     * `I - Informational AEP`: describes design issues or best practice. A notable informational PEP is [the Zen of Python](https://www.python.org/dev/peps/pep-0020/)
     * `P - Process AEP`: describes changes to processes in the AiiDA ecoystem, such as a change to the decision making or development process (e.g. new standards for commit messages)
   * date of creation: when the pull request for this AEP was opened
-  * date of last modification: should be updated whenever an implemented AEP is updated
   * status: one of
     * `draft` - this AEP has been accepted for further discussion and development
     * `implemented` - this AEP has been implemented
