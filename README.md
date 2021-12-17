@@ -9,7 +9,6 @@ Accepted AEPs can be easily browsed and read on the [online documentation](https
 
 ## Index of AEPs
 
-<<<<<<< HEAD
 | Number | Status           | Title                                                                                                  |
 |--------|------------------|--------------------------------------------------------------------------------------------------------|
 | 000    | implemented      | [AEP guidelines](000_aep_guidelines/readme.md)                                                         |
