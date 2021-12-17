@@ -6,7 +6,7 @@
 | Authors    | [Chris Sewell](mailto:christopher.sewell@epfl.ch) (chrisjsewell) |
 | Champions  | [Giovanni Pizzi](mailto:giovanni.pizzi@epfl.ch) (giovannipizzi)  |
 | Type       | S - Standard                                                     |
-| Created    | 18-Sept-2020                                                     |
+| Created    | 18-Sep-2020                                                      |
 | Status     | implemented                                                      |
 
 ## Background

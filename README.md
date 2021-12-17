@@ -11,10 +11,10 @@ Accepted AEPs can be easily browsed and read on the [online documentation](https
 
 | Number | Status           | Title                                                                                                  |
 |--------|------------------|--------------------------------------------------------------------------------------------------------|
-| 000    | active           | [AEP guidelines](000_aep_guidelines/readme.md)                                                         |
+| 000    | implemented      | [AEP guidelines](000_aep_guidelines/readme.md)                                                         |
 | 001    | implemented      | [Drop support for Python 2.7](001_drop_python2/readme.md)                                              |
 | 002    | implemented      | [AiiDA Dependency Management](002_dependency_management/readme.md)                                     |
-| 003    | active           | [Adopt NEP 29](003_adopt_nep_29/readme.md)                                                             |
+| 003    | implemented      | [Adopt NEP 29](003_adopt_nep_29/readme.md)                                                             |
 | 004    | implemented      | [Infrastructure for importing completed `CalcJob`s](004_calcjob_importer/readme.md)                    |
 | 005    | draft            | [New Export Format](005_exportformat/readme.md)                                                        |
 | 006    | implemented      | [Efficient object store for the AiiDA repository](006_efficient_object_store_for_repository/readme.md) |
