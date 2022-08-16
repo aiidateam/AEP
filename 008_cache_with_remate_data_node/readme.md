@@ -1,48 +1,76 @@
 # AEP 008: Proper caching policy for calcjob with RemoteData as output or input node in edge
 
-| AEP number | 008                                                          |
-|------------|--------------------------------------------------------------|
-| Title      | Proper caching policy for calcjob with RemoteData as output or input node in edge          |
-| Authors    | [Jusong Yu](mailto:jusong.yu@epfl.ch) (unkcpz)     |
-| Champions  |                                                              |
-| Type       | S - Standard Track AEP                                       |
-| Created    | 28-June-2022                                                  |
-| Status     | WIP                                                  |
+| AEP number | 008                                                                    |
+|------------|------------------------------------------------------------------------|
+| Title      | Caching policy for calcjob with RemoteData as output/input node in edge|
+| Authors    | [Jusong Yu](mailto:jusong.yu@epfl.ch) (@unkcpz)                        |
+| Champions  | Sebastiaan Huber (@sphuber)                                            |
+| Type       | S - Standard Track AEP                                                 |
+| Created    | 28-June-2022                                                           |
+| Status     | WIP                                                                    |
 
-## Background
-There are now two issues when the `CalcJob` has `RemoteData` node as its output and the `CalcJob` is then furthur used for caching. 
-First problem is that the `RemoteData` node is only shalow copy with creating a new `RemoteData` node for the new cached node but has the remote folder pointed exactly the same in the remote machine.
-This lead to that when doing `clean_workdir` from the cached calcjob the remote folder of the original node also cleaned up and unable to be used for further caching for other subsequent calculation which is not expected.
+## Background and problems description
+There are problems when the `CalcJob` has the `RemoteData` node as its output and the `CalcJob` is then further used for caching. 
+The overall goal of this AEP in summary is to have a better caching policy so that the cleaning and modification of caching sources will not have side effect on the cloned calculations and nodes.
 
-Another problem when caching with `RemoteData` is, the hash of `RemoteData` node generated from identical two separated run of `CalcJob` are different, which lead to subsequent calculation using `RemoteData` as input is not properly cached from. 
-As shown by diagram blow (copy from https://github.com/aiidateam/aiida-core/issues/5178#issuecomment-996536222):
-![caching_problem](https://user-images.githubusercontent.com/6992332/146514431-c9634668-6a0d-43ca-8829-4a3a69c16d27.png)
+As an overview, we are going to solve the following issues:
 
-We have `W1` that launches a `PwCalculation` (`Pw1`) which creates a `RemoteData` (`R1`), which is used as input for a `PhCalculation` (`Ph1`). 
-Another `PwCalculation`  (`Pw2`) is run outside of a workchain with the same input `D1`. The hash of `Pw1` and `Pw2` are identical, but the hashes of their `RemoteData`, `R1` and `R2` are different. Now the user launches a new workchain `W1'` which uses the exact same inputs as `W1`. 
-The  `PwCalculation` can now be cached from both `Pw1` and `Pw2` since their hashes are identical. Let's say that `Pw2` is chosen (by chance). This produces `RemoteData` (`R2'`) which has the same hash as `R2` since it is a clone. 
-Now the workchain moves on to running the `PhCalculation`, but it won't find a cache source, because no `PhCalculation` has been run yet with `R2` as an input.
+- Shallow copy on `RemoteData.clone()`
+- Invalidate cache after `RemoteData.clean()`
+- Hash calculation of `RemoteData`
+- Prospective workchain caching
 
-Moreover, the the complexity comes into play when we consider a chain of calculations that are all cached. 
-The integraty of real data store in remote machine of RemoteData is always not straightforward to check, which cause the issue that when remote folder is modified, it should be disabled from as a caching source. 
-This type of check requires the transport which rely on the connection to the remote computer and integraty of all files in remote, so it will become the bottleneck when doing the hash computing.
-It is hard to find a perfect solution for the final point, we can probably only check the folders hierarchy rather than all files.
-The plan of this AEP is only to solve the first two issues but leave the final issue open to discuss.
+### Shallow copy
+Contents of the RemoteData should really be cloned on the remote as well, not just the reference in AiiDA's database.
+The new RemoteData node created from caching has the remote folder pointed exactly the same in the remote machine.
+This led to that when doing `clean_workdir` from the cached calcjob the remote folder of the original node is also cleaned up and unable to be used for further caching for other subsequent calculations which is not expected.
 
-The overall goal of this AEP in summary is to have a new caching policy that the clean and modification of caching source will not have side effect on the cloned calculations and nodes.
+### Hash calculation of `RemoteData`
+The hash of a `RemoteData` is computed based on the absolute filepath on the remote file system. 
+This means that two nodes that have identical contents but have different base folders, will have different hashes. 
+Ideally, the hash should be calculated based on the hash of all contents, independent of the location on the remote.
+
+### Invalidate cache of the node after clean
+When `RemoteData._clean()` is called, an attribute or extra should be set which will cause it to no longer be considered a (fully) valid cache source.
+This is something requires discussion along with next item, the invalid tag attribute can be put to either the process node or the RemoteData node. 
+But be careful, I said not ‘fully’ valid cache source, since if the CalcJob node is finished with the expected and we want to use it next time from caching, no matter the RemoteData node attached to the CalcJab is cleaned or not, we want next run of the calculation with exactly the same input parameters can using the cache. 
+We only don’t want to use the RemoteData as the input of other further calculations (For instance, `PhCalculation` following a `PwCalculation`). 
+The catch is that only until the subsequent calculation runs we know that we need to regard it is a valid caching source or not. 
+
+### Prospective workchain caching
+If an entire workchain has already been run once, in principle it is not necessary to run its individual calcjobs again and we can simply cache everything. 
+Currently, the engine will still execute each step and consider each calcjob individually whether it should be cached. 
+If one of the remote folders of the cached jobs has been cleaned in the meantime, the workchain will fail, even though all results are essentially known. 
+One might think that we could just add a check that if the workchain with the same inputs exist, we simply clone the entire matched workchain, including everything it ran, without running anything.
+
 
 ## Proposed Enhancement 
-The three issues mentioned above are related to each other. 
-One advantage of current caching policy is that when we run a chain of calculations and the remote folder is integrate, the second run with caching will pick up all the cached source and spend zero resource to finish the whole calculation chain.
-This is because when the `RemoteData` is input for the calculation process, it has the same hash as the source which make the subsequent calculation run from the caching.
+The issues mentioned above are more or less related. 
 
-The goal of this proposal is to have a proper policy to caching the calculation when it involves the `RemoteData` node as input or output. 
-For the shalow copy of `RemoteData`, I propose to when clone the `CalcJob` node with `RemoteData`, the `RemoteData` cloned with actually open a connection to remote machine and copy the whole remote folder to a new remote repository. 
-However, if we use the current hashing method for `RemoteData`, the cloned `RemoteData` will have the different hash as the source, which lead to it is a new node never be the input of any other calculation on the chain.
-I propose for the `RemoteData` node hashing, since in the production environment the `RemoteData` can only be generated by other calculation process, the hashing compute from the hashing of hash of calculation process.
+### Shallow copy
+I propose to when clone the `CalcJob` node with `RemoteData`, the `RemoteData` cloned with actually open a connection to remote machine and copy the whole remote folder to a new remote repository. 
 
-### The drawbacks of proposed enhancement
-It still has the problem when there are more than one calculation process node as source, it will randomly pick up the source and clone it. 
-(TBD)
+#### Drawback
+As mentioned by Sebastiaan, the cloning will often happen by a daemon worker and so the opening of the transport should go through the transport queue. However, the call for the clone comes somewhere from `Node.store()` and it is not evident how to get access to the transport queue in a "nice" non-hacky way. 
+Without looking at the code, I think there is probably some way to schedule a transferring task for the connection needed clone of the RemoteData node. But it is for sure not as easy to implement as it looks like (I’ll update AEP after I have more concret plan on how to do this). 
 
-## Detailed Explanation 
+### Hash calculation of `RemoteData`
+I propose we change the hashing of `RemoteData` from based on the absolute filepath on the remote file system to based on computing hashing from the hashing of the calculation process which generates this RemoteData node, since in the production environment the `RemoteData` can only be generated by a calculation process.
+For this, we need to prevent generating a RemoteData without a parent process.
+(? not sure this is an advantage) I think there is another advantage that the cloned RemoteData with different hashing will never be picked up as the cached source since as the input its hashing is changed.
+
+#### Drawback
+When cached from the noumenon, the copied process nodes have different hashing so the RemoteData node of it should be regenerated. 
+Not sure it is possible to generate the hashing in the clone phase. 
+
+### Invalidate cache of the node after clean and prospective workchain caching
+I’d like to put these two problems together since the workchain caching at the moment is already supported with all the sub-workchains/calcjobs cached. 
+The problem comes when invalidating the cache of the RemodeData from a middle step will break the caching of whole workchain as it used to. 
+
+The target of caching is always AiiDA users do not need to run an identical calculation again which waste time and money. 
+
+… (describe two cases of large workchain design using pw+ph and MC3D junfeng/francisco example.)
+
+
+
+
