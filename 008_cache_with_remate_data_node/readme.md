@@ -7,6 +7,7 @@
 | Champions  | Sebastiaan Huber (@sphuber)                                            |
 | Type       | S - Standard Track AEP                                                 |
 | Created    | 28-June-2022                                                           |
+| Modified   | 18-August-2022, 26-August-2022                                                           |
 | Status     | WIP                                                                    |
 
 ## Background and problems description
@@ -65,11 +66,16 @@ Not sure it is possible to generate the hashing in the clone phase.
 
 ### Invalidate cache of the node after clean and prospective workchain caching
 I’d like to put these two problems together since the workchain caching at the moment is already supported with all the sub-workchains/calcjobs cached. 
-The problem comes when invalidating the cache of the RemodeData from a middle step will break the caching of whole workchain as it used to. 
+The problem comes when invalidating the cache of the RemodeData from a middle step sub-workfchain will break the caching of whole workchain as it used to. 
 
 The target of caching is always AiiDA users do not need to run an identical calculation again which waste time and money. 
 
-… (describe two cases of large workchain design using pw+ph and MC3D junfeng/francisco example.)
+The most straightforward way to solve this is to make workflow cacheable. 
+It is not supported because according to [documentation: caching and hashing](https://aiida.readthedocs.io/projects/aiida-core/en/latest/topics/provenance/caching.html#limitations-and-guidelines), since caching does not care about the identity of input nodes but only their content, it is not straightforward to figure out which node to return in a cached workflow. 
+We need find a way that make clone a workflow possible, which means all the directed acyclic graph (DAG) need to fully copied and have cloned nodes, plus that the caching the workflow will keep track the identity of the returned nodes of the workflow.
+
+#### Drawback
+No sure how to implement, discussion required.
 
 
 
