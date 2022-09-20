@@ -19,6 +19,7 @@ Accepted AEPs can be easily browsed and read on the [online documentation](https
 | 005    | draft            | [New Export Format](005_exportformat/readme.md)                                                        |
 | 006    | implemented      | [Efficient object store for the AiiDA repository](006_efficient_object_store_for_repository/readme.md) |
 | 007    | implemented      | [Abstract and improve the file repository](007_improved_file_repository/readme.md)                     |
+| 008    | implemented      | [Allow `CalcJob`s to be actively monitored and interrupted](008_calcjob_monitors/readme.md)            |
 
 ## Submitting an AEP
 
