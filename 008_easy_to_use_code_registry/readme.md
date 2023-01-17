@@ -75,7 +75,7 @@ It must be a cli command to accomplish this trivial task which already mentioned
 
 ### Registry page to show/upload new configures
 
-- From start only maintain one plain folder for every domain in aiida-core-registry to store all information of computer/code setup. (TOML/YAML/json) 
+- From start only maintain one file named with domain name for every domain in aiida-core-registry to store all information of computer/code setup. (TOML/YAML/json) 
 - Upload the new entities can be done by add/change the file through GitHub interface. 
 - This basically solve the issue for how to make user easily contribute the new config without much effort on designing web interface to upload and for reviewing.
 - For the advanced user, it can be a bonus design if the folder can be download and store in the local `.aiida` folder and for setuping much easily with from reading the folder if it exist. The proof of concept see https://github.com/aiidateam/aiida-code-registry/pull/62. Not only the config of one code/computer setup but all computer/code configs of a profile can be exported into a particular format that can be store in the aiida config folder. It can be then shared and for easy load the configs. The idea is bring up by ltailz.
@@ -91,7 +91,10 @@ It can be very useful that the command for setup computer/code directly show in 
 
 ## Roadmap of the implamentation
 
-
+The first step would be to make it able to export the setup from database for both computer and code with the data stored in the database and for the computer configure data.
+Then I'll implement setup from template file.
+After the template system is matural, rearranging the `aiida-code-registry` to using the template/YAML mix config and cumulate all configure files into a TOML file for every domain.
+Design the web page to parse and show the YAML/j2 config file back in the new code registry page.
 
 ## Pros and Cons 
 
