@@ -91,10 +91,10 @@ It can be very useful that the command for setup computer/code directly show in 
 
 ## Roadmap of the implamentation
 
-The first step would be to make it able to export the setup from database for both computer and code with the data stored in the database and for the computer configure data.
-Then I'll implement setup from template file.
-After the template system is matural, rearranging the `aiida-code-registry` to using the template/YAML mix config and cumulate all configure files into a TOML file for every domain.
-Design the web page to parse and show the YAML/j2 config file back in the new code registry page.
+- The first step would be to make it able to export the setup from database for both computer and code with the data stored in the database and for the computer configure data.
+- Then I'll implement setup from template file.
+- After the template system is matural, rearranging the `aiida-code-registry` to using the template/YAML mix config and cumulate all configure files into a TOML file for every domain.
+- Design the web page to parse and show the YAML/j2 config file back in the new code registry page.
 
 ## Pros and Cons 
 
