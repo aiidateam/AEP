@@ -11,7 +11,7 @@
 
 ## Background 
 
-For the beginners and even for the experienced AiiDA user, setting up computers and codes is still a tidious mission.
+For the beginners and even for the experienced AiiDA user, setting up computers and codes is still a tedious mission.
 If using the interactive mode, although it is good that options are prompt up and user can set for every options one by one carefully, it requires to go through all options even some are not necessary and time consuming for the similar setup that have shared options with other code/computer setup.
 AiiDA provide the non-interactive mode to set up the computer/code from a config yaml file, which lower the burden for users who need to set up the computer/code next time. 
 However, the non-interactive mode requires a yaml file as the input and not clear which options are mandatory and let alone it is not clear which default value will be used without checking the command help message or even the source code.
