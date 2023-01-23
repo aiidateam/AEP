@@ -5,7 +5,7 @@
 | Title      | New aiida-code-registry for easy code/computer setup                  |
 | Authors    | [Jusong Yu](mailto:jusong.yu@psi.ch) (unkcpz) |
 | Champions  | [Jusong Yu](mailto:jusong.yu@psi.ch) (unkcpz) |
-| Type       | P - Process                                                  |
+| Type       | S - Standard Track                                                |
 | Created    | 08-Jan-2023                                                  |
 | Status     | draft                                                  |
 
@@ -99,11 +99,6 @@ It can be very useful that the command for setup computer/code directly show in 
 ## Pros and Cons 
 
 ### Pros
-* The public discussion of enhancement proposals lets the entire AiiDA community see what developments lie ahead
-  and allows those interested to actively participate in shaping them
-* AEPs provide basic guidance on how to "make a case" for an enhancement such that it can be seriously discussed
-  before investing efforts in its implementation
-* The corresponding pull requests provide a public record of the decision process in case questions arise later
 
 ### Cons
 * Introduce new command for code/computer setup and coexist with old setup command may bring complicity to new user and not familiar for old user.
