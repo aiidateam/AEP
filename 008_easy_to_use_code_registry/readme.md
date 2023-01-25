@@ -11,16 +11,9 @@
 
 ## Background 
 
-For the beginners and even for the experienced AiiDA user, setting up computers and codes is still a tedious mission.
-If using the interactive mode, although it is good that options are prompt up and user can set for every options one by one carefully, it requires to go through all options even some are not necessary and time consuming for the similar setup that have shared options with other code/computer setup.
-AiiDA provide the non-interactive mode to set up the computer/code from a config yaml file, which lower the burden for users who need to set up the computer/code next time. 
-However, the non-interactive mode requires a yaml file as the input and not clear which options are mandatory and let alone it is not clear which default value will be used without checking the command help message or even the source code.
-Let alone for the computer setup it is a two stage process, user need to set up the compture for attributes which are common information for the computer that are store in the database using `verdi computer setup`. 
-Then running `verdi computer configuration <transport> <label>` to set up information of computer that are specific to user or required to modified after the node store in the database.
+For beginners and even for the experienced AiiDA user, setting up computers and codes is still a tedious mission. If using the interactive mode, although it is good that options are prompted up and the user can set every option one by one carefully, it requires going through all options even if some are not necessary and time-consuming for a similar setup that have shared options with other code/computer setup. AiiDA provides the non-interactive mode to set up the computer/code from a config yaml file, which lower the burden for users who need to set up the computer/code next time. However, the non-interactive mode requires a yaml file as the input and not clear which options are mandatory and let alone it is not clear which default value will be used without checking the command help message or even the source code. Let alone for the computer setup it is a two-stage process, user needs to set up the computer for attributes that are common information for the computer that is stored in the database using verdi computer setup. Then running verdi computer configuration <transport> <label> to set up information of the computer that is specific to the user or required to modify after the node stored in the database.
 
-The computer/code can be set up from a YAML file, and we provide repository [`aiida-code-registry`](https://github.com/aiidateam/aiida-code-registry) to store the YAML files for public computers and codes to share with others.
-Need to mention that the interactive setup command can accept a URL of a remote YAML file for setup.
-This makes it possible to not download/clone the `aiida-code-registry` repo to using the YAML to setup computer/code.
+The computer/code can be set up from a YAML file, and we provide repository [aiida-code-registry](https://github.com/aiidateam/aiida-code-registry) to store the YAML files for public computers and codes to share with others. Need to mention that the interactive setup command can accept a URL of a remote YAML file for setup. This makes it possible to not download/clone the `aiida-code-registry` repo to use the YAML to set up computer/code.
 
 ## Current problems
 
