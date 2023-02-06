@@ -91,7 +91,7 @@ Each item MUST be in one of the following states:
 
 ### Roadmap item structure
 
-Each item SHOULD follow the structure denoted below.
+Each item SHOULD be written in Markdown and follow the structure denoted below.
 The goal is for the writing process to have minimal overhead, and that the item is understandable as early as possible.
 
 #### Heading
