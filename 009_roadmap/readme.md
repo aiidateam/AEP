@@ -2,7 +2,7 @@
 
 | AEP number |                       000                       |
 | ---------- | ----------------------------------------------- |
-| Title      | AiiDA Enhancement Proposal (AEP) Guidelines     |
+| Title      | Implement a formal AiiDA Roadmap                |
 | Authors    | [Chris Sewell](https://github.com/chrisjsewell) |
 | Champions  | [Chris Sewell](https://github.com/chrisjsewell) |
 | Type       | P - Process                                     |
@@ -106,6 +106,8 @@ It should be prepended with the item category, in the form:
 - `Dev: `
 
 From the title should be clear for users/stakeholders what the item addresses.
+
+It should also, ideally, be "proactive", such as "Make it easier ...", "Allow users to ...", "Improve the ...".
 
 #### Motivation
 
