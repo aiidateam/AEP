@@ -1,6 +1,6 @@
 root: README.md
 subtrees:
-- caption: Proposals 
+- caption: Proposals
   entries:
   - file: 000_aep_guidelines/readme.md
   - file: 001_drop_python2/readme.md
@@ -11,3 +11,4 @@ subtrees:
   - file: 006_efficient_object_store_for_repository/readme.md
   - file: 007_improved_file_repository/readme.md
   - file: 008_calcjob_monitors/readme.md
+  - file: 009_improved_docker_images/readme.md
