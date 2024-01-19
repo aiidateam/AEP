@@ -47,7 +47,7 @@ Besides the main design goals described above, there was an additional goal that
 
 The reason is that it is currently not clear from known use-cases whether this requirement is necessary and it would significantly complicate the implementation.
 It is therefore mentioned here for completeness but the implementation of this AEP will not satisfy it.
-See the [section on "Design disadvantages"](#Disadvantages) for a more detailed discussion on this topic.
+See the [section on "Design disadvantages"](#disadvantages) for a more detailed discussion on this topic.
 
 ## Implementation
 The current engine design has the capability of processing multiple tasks for a calculation job asynchronously.
