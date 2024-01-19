@@ -8,3 +8,4 @@ exclude_patterns = [".github", ".tox", ".vscode", "_build"]
 external_toc_exclude_missing = True
 html_theme = "furo"
 suppress_warnings = ["myst.header"]
+myst_heading_anchors = 3
