@@ -21,6 +21,7 @@ Accepted AEPs can be easily browsed and read on the [online documentation](https
 | 007    | implemented      | [Abstract and improve the file repository](007_improved_file_repository/readme.md)                     |
 | 008    | implemented      | [Allow `CalcJob`s to be actively monitored and interrupted](008_calcjob_monitors/readme.md)            |
 | 009    | implemented      | [Improved Docker images](009_improved_docker_images/readme.md)                                         |
+| 010    | draft            | [`PythonJob`](010_pythonjob/readme.md)                                         |
 
 ## Submitting an AEP
 
