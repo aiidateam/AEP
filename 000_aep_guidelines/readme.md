@@ -66,6 +66,19 @@ A detailed discussion about all relevant technical information, possible API des
 
 A summary for pros and cons for the proposed enhancement, detailing e.g. which possible compatibility issues may arise.
 
+### Diagrams
+
+A code fence tagged `mermaid` renders as a diagram both on GitHub and in the
+[online documentation](https://aep.readthedocs.io/), following the [Mermaid](https://mermaid.js.org) syntax:
+
+```mermaid
+graph LR
+    draft --> implemented
+```
+
+Nothing checks the diagram at build time, so a syntax error surfaces as an error box where the
+diagram should be. GitHub renders the fence in the pull request diff, which is where to catch it.
+
 ### How to submit an AEP
 
 1. [Fork](https://help.github.com/en/articles/fork-a-repo) this repository
