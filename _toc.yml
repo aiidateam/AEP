@@ -12,3 +12,4 @@ subtrees:
   - file: 007_improved_file_repository/readme.md
   - file: 008_calcjob_monitors/readme.md
   - file: 009_improved_docker_images/readme.md
+  - file: 010_orm_schema/readme.md
